@@ -44,6 +44,8 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     reply_keyboard = [['Male', 'Female']]
     user = update.message.from_user
 
+    logger.info(f'User {user.first_name} started')
+
     await update.message.reply_text(
         f'Hi {user.first_name}! This is symptom checker, what is your gender?',
         reply_markup=ReplyKeyboardMarkup(
@@ -61,6 +63,8 @@ async def gender(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     elif update.message.text == 'Female':
         user_model.gender = True
 
+    logger.info(f'User {user.first_name} selected {user_model.gender}')
+
     await update.message.reply_text(
         f'{user_model.name}, what is your age?',
         reply_markup=ReplyKeyboardRemove(),
@@ -75,7 +79,7 @@ async def age(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     )
     user_model.age = int(update.message.text)
 
-    logger.info(f'{user_model.name}, {user_model.age}, {user_model.gender}')
+    logger.info(f'Total: {user_model.name}, {user_model.age}, {user_model.gender}')
     return ConversationHandler.END
 
 
