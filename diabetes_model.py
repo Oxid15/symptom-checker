@@ -2,47 +2,38 @@ from user_model import UserModel
 
 
 class Diabetes1:
-    def __init__(self):
-        self.user = UserModel()
-
-    def symptoms(self):
+    def symptoms(self, user: UserModel):
         pass
 
 # do we need different classes for different types
 
 
-class Diabetes:
-    def __init__(self):
-        self.user = UserModel()
-
-    def symptoms(self):
-        if (self.user.age >= 45 or
-                self.user.bmi > 25 or
-                self.user.has_parents_diabetes or
-                self.user.has_art_hypertension or
-                self.user.has_smoking_habit or
-                self.user.has_appetite_increase or
-                self.user.has_burning_sensation or
-                self.user.has_lose_weight or
-                self.user.has_freq_urination or
-                self.user.has_nausea or
-                self.user.has_faintness or
-                self.user.has_thirst_morning_night or
-                self.user.has_poor_wound_healing or
-                self.user.has_high_blood_pressure or
-                self.user.has_furunculosis or
-                self.user.has_candidiasis or
-                self.user.has_exc_physical_activity or
-                self.user.has_impaired_vision or
-                self.user.has_pain_in_leg or
-                self.user.has_headache or
-                self.user.has_dizziness):
+class DiabetesModel:
+    def symptoms(self, user: UserModel):
+        if (
+            user.age >= 45 or
+            user.bmi > 25 or
+            user.has_parents_diabetes or
+            user.has_art_hypertension or
+            user.has_smoking_habit or
+            user.has_appetite_increase or
+            user.has_burning_sensation or
+            user.has_lose_weight or
+            user.has_freq_urination or
+            user.has_nausea or
+            user.has_faintness or
+            user.has_thirst_morning_night or
+            user.has_poor_wound_healing or
+            user.has_high_blood_pressure or
+            user.has_furunculosis or
+            user.has_candidiasis or
+            user.has_exc_physical_activity or
+            user.has_impaired_vision or
+            user.has_pain_in_leg or
+            user.has_headache or
+            user.has_dizziness
+        ):
             return True
 
-    def recommendations(self):
-
-        if self.user.is_pregnant:
-            return ''
-        else:
-            return ''
-
+    def recommendations(self, user) -> str:
+        return 'all good'
