@@ -1,15 +1,17 @@
 from user_model import UserModel
+from utils import bmi as bmi_func
 
 
 class HypertensionModel:
     def symptoms(self, user: UserModel):
+        bmi = bmi_func(user)
         if user.gender == 'male':
             if (user.age > 55 or
                     user.has_smoking_habit in ['every hour', 'quit'] or
                     user.alcohol == 'every day' or
                     user.activity_level == 'mild' or
                     user.has_parents_hypertension or
-                    user.bmi > 25 or
+                    bmi > 25 or
                     user.heart_beat_per_sec > 80 or
                     user.has_high_blood_pressure or
                     user.has_diabetes):
@@ -20,13 +22,15 @@ class HypertensionModel:
                     user.alcohol == 'every day' or
                     user.activity_level == 'mild' or
                     user.has_parents_hypertension or
-                    user.bmi > 25 or
+                    bmi > 25 or
                     user.heart_beat_per_sec > 80 or
                     user.has_high_blood_pressure or
                     user.has_diabetes):
                 return True
 
     def score(self, user: UserModel):
+        bmi = bmi_func(user)
+
         scoring = {
             'gender': {'male>55': 6, 'female>65': 3, 'female': 0, 'male': 0},
             'alcohol': {'every day': 8, 'once a week': 2, 'on holidays': 0, 'quit': 0, 'no': 0},  # todo
@@ -51,9 +55,9 @@ class HypertensionModel:
             score += scoring['alcohol'][user.alcohol]
         elif user.has_parents_hypertension:
             score += scoring['parents hypertension']
-        elif user.bmi > 30:
+        elif bmi > 30:
             score += scoring['bmi']['30>']
-        elif 25 < user.bmi < 30:
+        elif 25 < bmi < 30:
             score += scoring['bmi']['25-30']
         elif user.heart_beat_per_sec > 80:
             score += scoring['heart beat']['80>']

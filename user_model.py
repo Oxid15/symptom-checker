@@ -13,7 +13,6 @@ class UserModel:
 
         self.weight: int = None
         self.height: int = None
-        self.bmi: float = self.weight / (self.height / 100) ** 2  # kg/m
         self.activity_level: Literal['mild', 'moderate', 'active'] = None
 
         # if user quit this year but was a strong smoker they're in risk too

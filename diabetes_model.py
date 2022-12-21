@@ -1,4 +1,5 @@
 from user_model import UserModel
+from utils import bmi as bmi_func
 
 
 class Diabetes1:
@@ -10,9 +11,10 @@ class Diabetes1:
 
 class DiabetesModel:
     def symptoms(self, user: UserModel):
+        bmi = bmi_func(user)
         if (
             user.age >= 45 or
-            user.bmi > 25 or
+            bmi > 25 or
             user.has_parents_diabetes or
             user.has_art_hypertension or
             user.has_smoking_habit or
