@@ -5,20 +5,19 @@ from hypertension_model import Hypertension
 
 class SymptomChecker:
     def __init__(self):
-        self.user = UserModel()
-        self.hypertension = Hypertension()
-        self.diabetes = Diabetes()
+        self._hypertension_model = Hypertension()
+        self._diabetes_model = Diabetes()
 
-    def model(self):
-        if self.user.age < 18:
-            print('not suitable for children')
+    def check(self, user: UserModel) -> str:
+        if user.age < 18:
+            return 'no children'
 
-        hyper = self.hypertension.symptoms()
-        diab = self.diabetes.symptoms()
+        hyper = self._hypertension_model.symptoms()
+        diab = self._diabetes_model.symptoms()
 
         if hyper:
-            self.hypertension.recommendations()
+            return self._hypertension_model.recommendations()
         elif diab:
-            self.diabetes.recommendations()
+            return self._diabetes_model.recommendations()
         else:
-            print("there's nothing wrong with you")
+            return "there's nothing wrong with you"
