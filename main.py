@@ -43,7 +43,7 @@ logger = logging.getLogger(__name__)
     HAS_HIGH_BLOOD_PRESSURE, HAS_FURUNCULOSIS,
     HAS_CANDIASIS, HAS_EXC_PHYSICAL_ACTIVITY,
     HAS_IMPAIRED_VISION, IMPAIRED_VISION_DURATION,
-    HAS_PAIN_IN_LEG, PAIN_LEG_INTENSITY,
+    HAS_PAIN_IN_LEG, PAIN_IN_LEG_INTENSITY,
     HAS_HEADACHE, HEADACHE_LOCATION, HEADACHE_DURATION,
     HEADACHE_INTENSITY, HAS_DIZZINESS, DIZZINESS_DURATION,
     DIZZINESS_INTENSITY, DIZZINESS_INTERFERES
@@ -485,7 +485,267 @@ async def has_exc_physical_activity(update: Update, context: ContextTypes.DEFAUL
     logger.info(f'User {user.first_name} selected {user_model.has_exc_physical_activity}')
 
     await update.message.reply_text(
-       str(user_model)
+        'Do you have impaired vision?',
+        reply_markup=ReplyKeyboardMarkup(
+            reply_keyboard, one_time_keyboard=True,
+            input_field_placeholder='Yes or no?'
+        )
+    )
+
+    return HAS_IMPAIRED_VISION
+
+
+async def has_impaired_vision(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+    user = update.message.from_user
+    user_model.has_impaired_vision = update.message.text == 'yes'
+
+    logger.info(f'User {user.first_name} selected {user_model.has_impaired_vision}')
+
+    if user_model.has_impaired_vision:
+        reply_keyboard = [['<1 day', '1 day to 1 week', '1 week to 1 month', '1 month to 1 year']]
+        await update.message.reply_text(
+            'How long do you have it?',
+            reply_markup=ReplyKeyboardMarkup(
+                reply_keyboard, one_time_keyboard=True,
+                input_field_placeholder='Duration'
+            )
+        )
+
+        return IMPAIRED_VISION_DURATION
+    else:
+        reply_keyboard = [['yes', 'no']]
+        await update.message.reply_text(
+            'Do you have pain in the leg?',
+            reply_markup=ReplyKeyboardMarkup(
+                reply_keyboard, one_time_keyboard=True,
+                input_field_placeholder='Yes or no?'
+            )
+        )
+
+        return HAS_PAIN_IN_LEG
+
+
+async def impaired_vision_duration(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+    reply_keyboard = [['yes', 'no']]
+    user = update.message.from_user
+    user_model.impaired_vision_duration = update.message.text
+
+    logger.info(f'User {user.first_name} selected {user_model.impaired_vision_duration}')
+
+    await update.message.reply_text(
+        'Do you have pain in the leg?',
+        reply_markup=ReplyKeyboardMarkup(
+            reply_keyboard, one_time_keyboard=True,
+            input_field_placeholder='Yes or no?'
+        )
+    )
+
+    return HAS_PAIN_IN_LEG
+
+
+async def has_pain_in_leg(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+    user = update.message.from_user
+    user_model.has_pain_in_leg = update.message.text == 'yes'
+
+    logger.info(f'User {user.first_name} selected {user_model.has_pain_in_leg}')
+
+    if user_model.has_pain_in_leg:
+        reply_keyboard = [['mild', 'moderate', 'intense']]
+        await update.message.reply_text(
+            'How intense the pain?',
+            reply_markup=ReplyKeyboardMarkup(
+                reply_keyboard, one_time_keyboard=True,
+                input_field_placeholder='How intense the pain?'
+            )
+        )
+
+        return PAIN_IN_LEG_INTENSITY
+    else:
+        reply_keyboard = [['yes', 'no']]
+        await update.message.reply_text(
+            'Do you have a headache?',
+            reply_markup=ReplyKeyboardMarkup(
+                reply_keyboard, one_time_keyboard=True,
+                input_field_placeholder='Yes or no?'
+            )
+        )
+
+        return HAS_HEADACHE
+
+
+async def pain_in_leg_intensity(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+    reply_keyboard = [['yes', 'no']]
+    user = update.message.from_user
+    user_model.pain_in_leg_intensity = update.message.text
+    logger.info(f'User {user.first_name} selected {user_model.pain_in_leg_intensity}')
+
+    await update.message.reply_text(
+        'Do you have a headache?',
+        reply_markup=ReplyKeyboardMarkup(
+            reply_keyboard, one_time_keyboard=True,
+            input_field_placeholder='Yes or no?'
+        )
+    )
+
+    return HAS_HEADACHE
+
+
+async def has_headache(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+    user = update.message.from_user
+    user_model.has_headache = update.message.text == 'yes'
+
+    logger.info(f'User {user.first_name} selected {user_model.has_headache}')
+
+    if user_model.has_headache:
+        reply_keyboard = [['left', 'right', 'both', 'center']]
+        await update.message.reply_text(
+            'Where?',
+            reply_markup=ReplyKeyboardMarkup(
+                reply_keyboard, one_time_keyboard=True,
+                input_field_placeholder='Where?'
+            )
+        )
+
+        return HEADACHE_LOCATION
+    else:
+        reply_keyboard = [['yes', 'no']]
+        if user_model.has_headache:
+            await update.message.reply_text(
+                'Do you feel dizzy?',
+                reply_markup=ReplyKeyboardMarkup(
+                    reply_keyboard, one_time_keyboard=True,
+                    input_field_placeholder='Yes or no?'
+                )
+            )
+
+        return HAS_DIZZINESS
+
+
+async def headache_location(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+    reply_keyboard = [['<1 day', '1 day to 1 week', '1 week to 1 month', '1 month to 1 year']]
+    user = update.message.from_user
+    user_model.headache_location = update.message.text == 'yes'
+
+    logger.info(f'User {user.first_name} selected {user_model.headache_location}')
+
+    await update.message.reply_text(
+        'For how long?',
+        reply_markup=ReplyKeyboardMarkup(
+            reply_keyboard, one_time_keyboard=True,
+            input_field_placeholder='Duration'
+        )
+    )
+
+    return HEADACHE_DURATION
+
+
+async def headache_duration(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+    reply_keyboard = [['mild', 'moderate', 'intense']]
+    user = update.message.from_user
+    user_model.headache_duration = update.message.text == 'yes'
+
+    logger.info(f'User {user.first_name} selected {user_model.headache_duration}')
+
+    await update.message.reply_text(
+        'How intense is the pain?',
+        reply_markup=ReplyKeyboardMarkup(
+            reply_keyboard, one_time_keyboard=True,
+            input_field_placeholder='Intensity'
+        )
+    )
+
+    return HEADACHE_INTENSITY
+
+
+async def headache_intensity(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+    reply_keyboard = [['yes', 'no']]
+    user = update.message.from_user
+    user_model.headache_intensity = update.message.text
+
+    logger.info(f'User {user.first_name} selected {user_model.headache_intensity}')
+
+    await update.message.reply_text(
+        'Do you feel dizzy?',
+        reply_markup=ReplyKeyboardMarkup(
+            reply_keyboard, one_time_keyboard=True,
+            input_field_placeholder='Yes or no?'
+        )
+    )
+
+    return HAS_DIZZINESS
+
+
+async def has_dizziness(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+    user = update.message.from_user
+    user_model.has_dizziness = update.message.text == 'yes'
+
+    logger.info(f'User {user.first_name} selected {user_model.has_dizziness}')
+
+    if user_model.has_dizziness:
+        reply_keyboard = [['<1 day', '1 day to 1 week', '1 week to 1 month', '1 month to 1 year']]
+        await update.message.reply_text(
+            'For how long?',
+            reply_markup=ReplyKeyboardMarkup(
+                reply_keyboard, one_time_keyboard=True,
+                input_field_placeholder='Duration'
+            )
+        )
+
+        return DIZZINESS_DURATION
+    else:
+        # reply_keyboard = [['yes', 'no']]
+        await update.message.reply_text(
+            str(user_model)
+        )
+
+        return ConversationHandler.END
+
+
+async def dizziness_duration(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+    reply_keyboard = [['mild', 'moderate', 'active']]
+    user = update.message.from_user
+    user_model.dizziness_duration = update.message.text == 'yes'
+
+    logger.info(f'User {user.first_name} selected {user_model.dizziness_duration}')
+
+    await update.message.reply_text(
+        'How intense?',
+        reply_markup=ReplyKeyboardMarkup(
+            reply_keyboard, one_time_keyboard=True,
+            input_field_placeholder='Intensity'
+        )
+    )
+
+    return DIZZINESS_INTENSITY
+
+
+async def dizziness_intensity(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+    reply_keyboard = [['yes', 'no']]
+    user = update.message.from_user
+    user_model.dizziness_intensity = update.message.text == 'yes'
+
+    logger.info(f'User {user.first_name} selected {user_model.dizziness_intensity}')
+
+    await update.message.reply_text(
+        'Dizziness inteferes in your daily activities?',
+        reply_markup=ReplyKeyboardMarkup(
+            reply_keyboard, one_time_keyboard=True,
+            input_field_placeholder='Yes or no?'
+        )
+    )
+
+    return DIZZINESS_INTERFERES
+
+
+async def dizziness_interferes(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+    reply_keyboard = [['yes', 'no']]
+    user = update.message.from_user
+    user_model.dizziness_interferes = update.message.text == 'yes'
+
+    logger.info(f'User {user.first_name} selected {user_model.dizziness_interferes}')
+
+    await update.message.reply_text(
+        str(user_model)
     )
 
     return ConversationHandler.END
@@ -578,6 +838,42 @@ if __name__ == '__main__':
             ],
             HAS_EXC_PHYSICAL_ACTIVITY: [
                 MessageHandler(filters.Regex('[yes|no]'), has_exc_physical_activity)
+            ],
+            HAS_IMPAIRED_VISION: [
+                MessageHandler(filters.Regex('[yes|no]'), has_impaired_vision)
+            ],
+            IMPAIRED_VISION_DURATION: [
+                MessageHandler(filters.Regex('[<1 day|1 day to 1 week|1 week to 1 month|1 month to 1 year]'), impaired_vision_duration)
+            ],
+            HAS_PAIN_IN_LEG: [
+                MessageHandler(filters.Regex('[yes|no]'), has_pain_in_leg)
+            ],
+            PAIN_IN_LEG_INTENSITY: [
+                MessageHandler(filters.Regex('[mild|moderate|active]'), pain_in_leg_intensity)
+            ],
+            HAS_HEADACHE: [
+                MessageHandler(filters.Regex('[yes|no]'), has_headache)
+            ],
+            HEADACHE_LOCATION: [
+                MessageHandler(filters.Regex('left|right|both|center'), headache_location)
+            ],
+            HEADACHE_DURATION: [
+                MessageHandler(filters.Regex('[<1 day|1 day to 1 week|1 week to 1 month|1 month to 1 year]'), headache_duration)
+            ],
+            HEADACHE_INTENSITY: [
+                MessageHandler(filters.Regex('[mild|moderate|active]'), headache_intensity)
+            ],
+            HAS_DIZZINESS: [
+                MessageHandler(filters.Regex('[yes|no]'), has_dizziness)
+            ],
+            DIZZINESS_DURATION: [
+                MessageHandler(filters.Regex('[<1 day|1 day to 1 week|1 week to 1 month|1 month to 1 year]'), dizziness_duration)
+            ],
+            DIZZINESS_INTENSITY: [
+                MessageHandler(filters.Regex('[mild|moderate|active]'), dizziness_intensity)
+            ],
+            DIZZINESS_INTERFERES: [
+                MessageHandler(filters.Regex('[yes|no]'), dizziness_interferes)
             ]
         },
         fallbacks=[CommandHandler('cancel', cancel)],
