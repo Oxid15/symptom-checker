@@ -1,6 +1,10 @@
 from typing import Literal, Union
 
 
+Duration = Literal['<1 day', '1 day to 1 week', '1 week to 1 month', '1 month to 1 year', None]
+Intensity = Literal['mild', 'moderate', 'severe', None]
+
+
 class UserModel:
     def __init__(self):
         self.name: str
@@ -35,20 +39,20 @@ class UserModel:
         self.has_exc_physical_activity: bool
 
         self.has_impaired_vision: bool
-        # self.impaired_vision_duration: Union[Literal, None] = None  # options?
+        self.impaired_vision_duration: Duration
 
         self.has_pain_in_leg: bool
-        self.pain_in_leg_intensity: Union[Literal, None] = None
+        self.pain_in_leg_intensity: Intensity
 
         self.has_headache: bool
-        self.headache_location: Union[Literal, None] = None  # options?
-        self.headache_duration: Union[Literal, None] = None  # options?
-        self.headache_intensity: Literal['mild', 'moderate', 'severe', None] = None
+        self.headache_location: Literal['left', 'right', 'both', 'center', None]
+        self.headache_duration: Duration
+        self.headache_intensity: Intensity
 
         self.has_dizziness: bool
-        self.dizziness_duration: Union[Literal, None] = None  # options?
-        self.dizziness_intensity: Union[Literal['mild', 'moderate', 'severe'], None] = None
-        self.dizziness_interferes: Union[bool, None] = None
+        self.dizziness_duration: Duration
+        self.dizziness_intensity: Intensity
+        self.dizziness_interferes: bool
 
     def __str__(self) -> str:
         return str(self.__dict__)
