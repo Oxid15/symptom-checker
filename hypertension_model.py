@@ -7,23 +7,23 @@ class HypertensionModel:
         bmi = bmi_func(user)
         if user.gender == 'male':
             if (user.age > 55 or
-                    user.has_smoking_habit in ['every hour', 'quit'] or
-                    user.alcohol == 'every day' or
+                    user.has_smoking_habit or
+                    user.has_alcohol_habit == 'every day' or
                     user.activity_level == 'mild' or
                     user.has_parents_hypertension or
                     bmi > 25 or
-                    user.heart_beat_per_sec > 80 or
+                    # user.heart_beat_per_sec > 80 or
                     user.has_high_blood_pressure or
                     user.has_diabetes):
                 return True
         else:
             if (user.age > 65 or
-                    user.has_smoking_habit in ['every hour', 'quit'] or
-                    user.alcohol == 'every day' or
+                    user.has_smoking_habit or
+                    user.has_alcohol_habit == 'every day' or
                     user.activity_level == 'mild' or
                     user.has_parents_hypertension or
                     bmi > 25 or
-                    user.heart_beat_per_sec > 80 or
+                    # user.heart_beat_per_sec > 80 or
                     user.has_high_blood_pressure or
                     user.has_diabetes):
                 return True

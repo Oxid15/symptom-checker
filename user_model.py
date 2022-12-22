@@ -1,57 +1,52 @@
-from typing import Literal
+from typing import Literal, Union
 
 
 class UserModel:
     def __init__(self):
-        # todo blood pressure measures?
+        self.name: str
 
-        self.name: str = None
+        self.age: int
+        self.gender: str
+        self.is_pregnant: bool
 
-        self.age: int = None
-        self.gender: str = None
-        self.is_pregnant: bool = None
+        self.weight: int
+        self.height: int
+        self.activity_level: Literal['mild', 'moderate', 'active']
 
-        self.weight: int = None
-        self.height: int = None
-        self.activity_level: Literal['mild', 'moderate', 'active'] = None
+        self.has_smoking_habit: bool
+        self.has_alcohol_habit: bool
 
-        # if user quit this year but was a strong smoker they're in risk too
-        self.has_smoking_habit: Literal['every hour', 'no', 'quit', 'from time to time'] = None
-        self.alcohol: Literal['every day', 'once a week', 'on holidays', 'no', 'quit'] = None
+        self.has_art_hypertension: bool
+        self.has_parents_hypertension: bool
+        self.has_burning_sensation: bool
+        self.has_lose_weight: bool
+        self.has_appetite_increase: bool
+        self.has_freq_urination: bool
+        self.has_nausea: bool
+        self.has_faintness: bool
+        self.has_thirst_morning_night: bool
+        self.has_poor_wound_healing: bool
 
-        self.has_art_hypertension: bool = None
-        self.has_parents_hypertension: bool = None
-        self.heart_beat_per_sec: int = None
-        self.has_burning_sensation: bool = None
-        self.has_lose_weight: bool = None
-        self.has_appetite_increase: bool = None
-        self.has_freq_urination: bool = None
-        self.has_nausea: bool = None
-        self.has_faintness: bool = None
-        self.has_thirst_morning_night: bool = None
-        self.has_poor_wound_healing: bool = None
+        self.has_diabetes: bool
+        self.has_parents_diabetes: bool
+        self.has_high_blood_pressure: bool
+        self.has_furunculosis: bool
+        self.has_candidiasis: bool
+        self.has_exc_physical_activity: bool
 
-        self.has_diabetes: bool = None
-        self.has_parents_diabetes: bool = None
-        self.has_high_blood_pressure: bool = None
-        self.has_furunculosis: bool = None
-        self.has_candidiasis: bool = None
-        self.has_exc_physical_activity: bool = None
+        self.has_impaired_vision: bool
+        # self.impaired_vision_duration: Union[Literal, None] = None  # options?
 
-        self.has_impaired_vision: bool = None
-        self.impaired_vision_duration: Literal = None  # options?
+        self.has_pain_in_leg: bool
+        self.pain_in_leg_intensity: Union[Literal, None] = None
 
-        self.has_pain_in_leg: bool = None
-        self.pain_in_leg_intensity: Literal = None
+        self.has_headache: bool
+        self.headache_location: Union[Literal, None] = None  # options?
+        self.headache_duration: Union[Literal, None] = None  # options?
+        self.headache_intensity: Literal['mild', 'moderate', 'severe', None] = None
 
-        self.has_headache: bool = None
-        self.headache_location: Literal = None  # options?
-        self.headache_duration: Literal = None  # options?
-        self.headache_intensity: Literal['mild', 'moderate', 'severe'] = None
-
-        self.has_dizziness: bool = None
-        self.dizziness_duration: Literal = None  # options?
-        self.dizziness_intensity: Literal['mild', 'moderate', 'severe'] = None
-        self.dizziness_interferes: bool = None
-
+        self.has_dizziness: bool
+        self.dizziness_duration: Union[Literal, None] = None  # options?
+        self.dizziness_intensity: Union[Literal['mild', 'moderate', 'severe'], None] = None
+        self.dizziness_interferes: Union[bool, None] = None
 

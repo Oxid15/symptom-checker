@@ -18,6 +18,7 @@ class DiabetesModel:
             user.has_parents_diabetes or
             user.has_art_hypertension or
             user.has_smoking_habit or
+            user.has_alcohol_habit or
             user.has_appetite_increase or
             user.has_burning_sensation or
             user.has_lose_weight or
