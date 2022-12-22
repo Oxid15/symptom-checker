@@ -50,3 +50,5 @@ class UserModel:
         self.dizziness_intensity: Union[Literal['mild', 'moderate', 'severe'], None] = None
         self.dizziness_interferes: Union[bool, None] = None
 
+    def __str__(self) -> str:
+        return str(self.__dict__)
