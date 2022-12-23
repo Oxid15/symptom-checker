@@ -32,11 +32,28 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+
+def kb2regex(kb: List[List[str]]) -> filters.Regex:
+    terms = []
+    for row in kb:
+        for term in row:
+            terms.append(term)
+
+    return filters.Regex(f'[{"|".join(terms)}]')
+
+
 BINARY_KB = [['yes', 'no']]
 GENDER_KB = [['male', 'female']]
 ACTIVITY_KB = [['mild', 'moderate', 'active']]
 INTENSITY_KB = [['mild', 'moderate', 'intense']]
 DURATION_KB = [['<1 day', '1 day to 1 week', '1 week to 1 month', '1 month to 1 year']]
+
+INTEGER_REGEX = filters.Regex('^[0-9]')
+BINARY_REGEX = kb2regex(BINARY_KB)
+GENDER_REGEX = kb2regex(GENDER_KB)
+ACTIVITY_REGEX = kb2regex(ACTIVITY_KB)
+INTENSITY_REGEX = kb2regex(INTENSITY_KB)
+DURATION_REGEX = kb2regex(DURATION_KB)
 
 (
     GENDER, AGE, IS_PREGNANT, WEIGHT, HEIGHT,
@@ -100,8 +117,7 @@ async def gender(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     logger.info(f'User {user.id} selected {users[user.id].gender}')
 
     if users[user.id].gender == 'male':
-        await update.message.reply_text(
-            f'{users[user.id].name}, what is your weight in kg? Please write integer number')
+        await update.message.reply_text(f'{users[user.id].name}, what is your weight in kg? Please write integer number')
         return WEIGHT
     elif users[user.id].gender == 'female':
         await ask_optional(update, 'Are you pregnant?', BINARY_KB)
@@ -115,8 +131,7 @@ async def is_pregnant(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int
     users[user.id].is_pregnant = update.message.text == 'yes'
     logger.info(f'User {user.id} selected {users[user.id].is_pregnant}')
 
-    await update.message.reply_text(
-        f'{users[user.id].name},  what is your weight in kg? Please write integer number')
+    await update.message.reply_text(f'{users[user.id].name},  what is your weight in kg? Please write integer number')
     return WEIGHT
 
 
@@ -456,112 +471,112 @@ if __name__ == '__main__':
         entry_points=[CommandHandler('start', start)],
         states={
             AGE: [
-                MessageHandler(filters.Regex('^[0-9]'), age)
+                MessageHandler(INTEGER_REGEX, age)
             ],
             GENDER: [
-                MessageHandler(filters.Regex('[male|female]'), gender)
+                MessageHandler(GENDER_REGEX, gender)
             ],
             IS_PREGNANT: [
-                MessageHandler(filters.Regex('[yes|no]'), is_pregnant)
+                MessageHandler(BINARY_REGEX, is_pregnant)
             ],
             WEIGHT: [
-                MessageHandler(filters.Regex('^[0-9]'), weight)
+                MessageHandler(INTEGER_REGEX, weight)
             ],
             HEIGHT: [
-                MessageHandler(filters.Regex('^[0-9]'), height)
+                MessageHandler(INTEGER_REGEX, height)
             ],
             ACTIVITY_LEVEL: [
-                MessageHandler(filters.Regex('[mild|moderate|active]'), activity_level)
+                MessageHandler(ACTIVITY_REGEX, activity_level)
             ],
             HAS_SMOKING_HABIT: [
-                MessageHandler(filters.Regex('[yes|no]'), has_smoking_habit)
+                MessageHandler(BINARY_REGEX, has_smoking_habit)
             ],
             HAS_ALCOHOL_HABIT: [
-                MessageHandler(filters.Regex('[yes|no]'), has_alcohol_habit)
+                MessageHandler(BINARY_REGEX, has_alcohol_habit)
             ],
             HAS_ART_HYPERTENSION: [
-                MessageHandler(filters.Regex('[yes|no]'), has_art_hypertension)
+                MessageHandler(BINARY_REGEX, has_art_hypertension)
             ],
             HAS_PARENTS_HYPERTENSION: [
-                MessageHandler(filters.Regex('[yes|no]'), has_parents_hypertension)
+                MessageHandler(BINARY_REGEX, has_parents_hypertension)
             ],
             HAS_BURNING_SENSATION: [
-                MessageHandler(filters.Regex('[yes|no]'), has_burning_sensation)
+                MessageHandler(BINARY_REGEX, has_burning_sensation)
             ],
             HAS_LOSE_WEIGHT: [
-                MessageHandler(filters.Regex('[yes|no]'), has_lose_weight)
+                MessageHandler(BINARY_REGEX, has_lose_weight)
             ],
             HAS_APPETITE_INCREASE: [
-                MessageHandler(filters.Regex('[yes|no]'), has_appetite_increase)
+                MessageHandler(BINARY_REGEX, has_appetite_increase)
             ],
             HAS_FREQUENT_URINATION: [
-                MessageHandler(filters.Regex('[yes|no]'), has_freq_urination)
+                MessageHandler(BINARY_REGEX, has_freq_urination)
             ],
             HAS_NAUSEA: [
-                MessageHandler(filters.Regex('[yes|no]'), has_nausea)
+                MessageHandler(BINARY_REGEX, has_nausea)
             ],
             HAS_FAINTNESS: [
-                MessageHandler(filters.Regex('[yes|no]'), has_faintness)
+                MessageHandler(BINARY_REGEX, has_faintness)
             ],
             HAS_THIRST_MORNING_NIGHT: [
-                MessageHandler(filters.Regex('[yes|no]'), has_poor_wound_healing)
+                MessageHandler(BINARY_REGEX, has_poor_wound_healing)
             ],
             HAS_POOR_WOUND_HEALING: [
-                MessageHandler(filters.Regex('[yes|no]'), has_poor_wound_healing)
+                MessageHandler(BINARY_REGEX, has_poor_wound_healing)
             ],
             HAS_DIABETES: [
-                MessageHandler(filters.Regex('[yes|no]'), has_diabetes)
+                MessageHandler(BINARY_REGEX, has_diabetes)
             ],
             HAS_PARENTS_DIABETES: [
-                MessageHandler(filters.Regex('[yes|no]'), has_parents_diabetes)
+                MessageHandler(BINARY_REGEX, has_parents_diabetes)
             ],
             HAS_HIGH_BLOOD_PRESSURE: [
-                MessageHandler(filters.Regex('[yes|no]'), has_high_blood_pressure)
+                MessageHandler(BINARY_REGEX, has_high_blood_pressure)
             ],
             HAS_FURUNCULOSIS: [
-                MessageHandler(filters.Regex('[yes|no]'), has_furunculosis)
+                MessageHandler(BINARY_REGEX, has_furunculosis)
             ],
             HAS_CANDIASIS: [
-                MessageHandler(filters.Regex('[yes|no]'), has_candidiasis)
+                MessageHandler(BINARY_REGEX, has_candidiasis)
             ],
             HAS_EXC_PHYSICAL_ACTIVITY: [
-                MessageHandler(filters.Regex('[yes|no]'), has_exc_physical_activity)
+                MessageHandler(BINARY_REGEX, has_exc_physical_activity)
             ],
             HAS_IMPAIRED_VISION: [
-                MessageHandler(filters.Regex('[yes|no]'), has_impaired_vision)
+                MessageHandler(BINARY_REGEX, has_impaired_vision)
             ],
             IMPAIRED_VISION_DURATION: [
-                MessageHandler(filters.Regex('[<1 day|1 day to 1 week|1 week to 1 month|1 month to 1 year]'), impaired_vision_duration)
+                MessageHandler(DURATION_REGEX, impaired_vision_duration)
             ],
             HAS_PAIN_IN_LEG: [
-                MessageHandler(filters.Regex('[yes|no]'), has_pain_in_leg)
+                MessageHandler(BINARY_REGEX, has_pain_in_leg)
             ],
             PAIN_IN_LEG_INTENSITY: [
-                MessageHandler(filters.Regex('[mild|moderate|active]'), pain_in_leg_intensity)
+                MessageHandler(INTENSITY_REGEX, pain_in_leg_intensity)
             ],
             HAS_HEADACHE: [
-                MessageHandler(filters.Regex('[yes|no]'), has_headache)
+                MessageHandler(BINARY_REGEX, has_headache)
             ],
             HEADACHE_LOCATION: [
                 MessageHandler(filters.Regex('left|right|both|center'), headache_location)
             ],
             HEADACHE_DURATION: [
-                MessageHandler(filters.Regex('[<1 day|1 day to 1 week|1 week to 1 month|1 month to 1 year]'), headache_duration)
+                MessageHandler(DURATION_REGEX, headache_duration)
             ],
             HEADACHE_INTENSITY: [
-                MessageHandler(filters.Regex('[mild|moderate|active]'), headache_intensity)
+                MessageHandler(INTENSITY_REGEX, headache_intensity)
             ],
             HAS_DIZZINESS: [
-                MessageHandler(filters.Regex('[yes|no]'), has_dizziness)
+                MessageHandler(BINARY_REGEX, has_dizziness)
             ],
             DIZZINESS_DURATION: [
-                MessageHandler(filters.Regex('[<1 day|1 day to 1 week|1 week to 1 month|1 month to 1 year]'), dizziness_duration)
+                MessageHandler(DURATION_REGEX, dizziness_duration)
             ],
             DIZZINESS_INTENSITY: [
-                MessageHandler(filters.Regex('[mild|moderate|active]'), dizziness_intensity)
+                MessageHandler(INTENSITY_REGEX, dizziness_intensity)
             ],
             DIZZINESS_INTERFERES: [
-                MessageHandler(filters.Regex('[yes|no]'), dizziness_interferes)
+                MessageHandler(BINARY_REGEX, dizziness_interferes)
             ]
         },
         fallbacks=[CommandHandler('cancel', cancel)],
