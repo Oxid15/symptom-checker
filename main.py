@@ -1,6 +1,7 @@
 from typing import List
 import logging
 from user_model import UserModel
+from model import SymptomChecker
 
 from telegram import __version__ as TG_VER
 try:
@@ -75,6 +76,7 @@ HEADACHE_LOCATION_REGEX = kb2regex(HEADACHE_LOCATION_KB)
 ) = range(36)
 
 users = {}
+model = SymptomChecker()
 
 with open('token', 'r') as f:
     TOKEN = f.readline()
@@ -420,7 +422,10 @@ async def has_dizziness(update: Update, context: ContextTypes.DEFAULT_TYPE) -> i
         await ask_optional(update, 'For how long?', DURATION_KB)
         return DIZZINESS_DURATION
     else:
-        await update.message.reply_text(str(users[user.id]))
+        # INFERENCE
+        response = model.check(users[user.id])
+
+        await update.message.reply_text(response)
         return ConversationHandler.END
 
 
@@ -447,7 +452,10 @@ async def dizziness_interferes(update: Update, context: ContextTypes.DEFAULT_TYP
     users[user.id].dizziness_interferes = update.message.text == 'yes'
     logger.info(f'User {user.id} selected {users[user.id].dizziness_interferes}')
 
-    await update.message.reply_text(str(users[user.id]))
+    # INFERENCE
+    response = model.check(users[user.id])
+
+    await update.message.reply_text(response)
     return ConversationHandler.END
 
 
