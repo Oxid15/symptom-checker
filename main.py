@@ -32,6 +32,10 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+BINARY_KB = [['yes', 'no']]
+INTENSITY_KB = [['mild', 'moderate', 'active']]
+DURATION_KB = [['<1 day', '1 day to 1 week', '1 week to 1 month', '1 month to 1 year']]
+
 (
     GENDER, AGE, IS_PREGNANT, WEIGHT, HEIGHT,
     ACTIVITY_LEVEL, HAS_SMOKING_HABIT, HAS_ALCOHOL_HABIT,
@@ -96,11 +100,11 @@ async def gender(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
         )
         return WEIGHT
     elif user_model.gender == 'female':
-        reply_keyboard = [['yes', 'no']]
+
         await update.message.reply_text(
             f'{user_model.name}, are you pregnant?',
             reply_markup=ReplyKeyboardMarkup(
-                reply_keyboard, one_time_keyboard=True,
+                BINARY_KB, one_time_keyboard=True,
                 input_field_placeholder='Yes or no?'
             )
         )
@@ -136,7 +140,6 @@ async def weight(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
 
 
 async def height(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
-    reply_keyboard = [['mild', 'moderate', 'active']]
     user = update.message.from_user
     user_model.height = int(update.message.text)
 
@@ -145,7 +148,7 @@ async def height(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     await update.message.reply_text(
         'What is your physical activity level?',
         reply_markup=ReplyKeyboardMarkup(
-            reply_keyboard, one_time_keyboard=True,
+            INTENSITY_KB, one_time_keyboard=True,
             input_field_placeholder='How active are you?'
         )
     )
@@ -154,7 +157,6 @@ async def height(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
 
 
 async def activity_level(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
-    reply_keyboard = [['yes', 'no']]
     user = update.message.from_user
     user_model.activity_level = update.message.text
 
@@ -163,7 +165,7 @@ async def activity_level(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
     await update.message.reply_text(
         'Do you smoke?',
         reply_markup=ReplyKeyboardMarkup(
-            reply_keyboard, one_time_keyboard=True,
+            BINARY_KB, one_time_keyboard=True,
             input_field_placeholder='Yes or no?'
         )
     )
@@ -172,7 +174,6 @@ async def activity_level(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
 
 
 async def has_smoking_habit(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
-    reply_keyboard = [['yes', 'no']]
     user = update.message.from_user
     user_model.has_smoking_habit = update.message.text == 'yes'
 
@@ -181,7 +182,7 @@ async def has_smoking_habit(update: Update, context: ContextTypes.DEFAULT_TYPE) 
     await update.message.reply_text(
         'Do you drink alcohol frequently?',
         reply_markup=ReplyKeyboardMarkup(
-            reply_keyboard, one_time_keyboard=True,
+            BINARY_KB, one_time_keyboard=True,
             input_field_placeholder='Yes or no?'
         )
     )
@@ -190,7 +191,6 @@ async def has_smoking_habit(update: Update, context: ContextTypes.DEFAULT_TYPE) 
 
 
 async def has_alcohol_habit(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
-    reply_keyboard = [['yes', 'no']]
     user = update.message.from_user
     user_model.has_alcohol_habit = update.message.text == 'yes'
 
@@ -199,7 +199,7 @@ async def has_alcohol_habit(update: Update, context: ContextTypes.DEFAULT_TYPE) 
     await update.message.reply_text(
         'Have you been diagnosed with arterial hypertension?',
         reply_markup=ReplyKeyboardMarkup(
-            reply_keyboard, one_time_keyboard=True,
+            BINARY_KB, one_time_keyboard=True,
             input_field_placeholder='Yes or no?'
         )
     )
@@ -208,7 +208,6 @@ async def has_alcohol_habit(update: Update, context: ContextTypes.DEFAULT_TYPE) 
 
 
 async def has_art_hypertension(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
-    reply_keyboard = [['yes', 'no']]
     user = update.message.from_user
     user_model.has_art_hypertension = update.message.text == 'yes'
 
@@ -217,7 +216,7 @@ async def has_art_hypertension(update: Update, context: ContextTypes.DEFAULT_TYP
     await update.message.reply_text(
         'Have your parents been diagnosed with arterial hypertension?',
         reply_markup=ReplyKeyboardMarkup(
-            reply_keyboard, one_time_keyboard=True,
+            BINARY_KB, one_time_keyboard=True,
             input_field_placeholder='Yes or no?'
         )
     )
@@ -226,7 +225,6 @@ async def has_art_hypertension(update: Update, context: ContextTypes.DEFAULT_TYP
 
 
 async def has_parents_hypertension(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
-    reply_keyboard = [['yes', 'no']]
     user = update.message.from_user
     user_model.has_parents_hypertension = update.message.text == 'yes'
 
@@ -235,7 +233,7 @@ async def has_parents_hypertension(update: Update, context: ContextTypes.DEFAULT
     await update.message.reply_text(
         'Do you have burning sensation?',
         reply_markup=ReplyKeyboardMarkup(
-            reply_keyboard, one_time_keyboard=True,
+            BINARY_KB, one_time_keyboard=True,
             input_field_placeholder='Yes or no?'
         )
     )
@@ -244,7 +242,6 @@ async def has_parents_hypertension(update: Update, context: ContextTypes.DEFAULT
 
 
 async def has_burning_sensation(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
-    reply_keyboard = [['yes', 'no']]
     user = update.message.from_user
     user_model.has_burning_sensation = update.message.text == 'yes'
 
@@ -253,7 +250,7 @@ async def has_burning_sensation(update: Update, context: ContextTypes.DEFAULT_TY
     await update.message.reply_text(
         'Did you recently lose weight?',
         reply_markup=ReplyKeyboardMarkup(
-            reply_keyboard, one_time_keyboard=True,
+            BINARY_KB, one_time_keyboard=True,
             input_field_placeholder='Yes or no?'
         )
     )
@@ -262,7 +259,6 @@ async def has_burning_sensation(update: Update, context: ContextTypes.DEFAULT_TY
 
 
 async def has_lose_weight(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
-    reply_keyboard = [['yes', 'no']]
     user = update.message.from_user
     user_model.has_lose_weight = update.message.text == 'yes'
 
@@ -271,7 +267,7 @@ async def has_lose_weight(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
     await update.message.reply_text(
         'Did you have your appetite increase recently?',
         reply_markup=ReplyKeyboardMarkup(
-            reply_keyboard, one_time_keyboard=True,
+            BINARY_KB, one_time_keyboard=True,
             input_field_placeholder='Yes or no?'
         )
     )
@@ -280,7 +276,6 @@ async def has_lose_weight(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
 
 
 async def has_appetite_increase(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
-    reply_keyboard = [['yes', 'no']]
     user = update.message.from_user
     user_model.has_appetite_increase = update.message.text == 'yes'
 
@@ -289,7 +284,7 @@ async def has_appetite_increase(update: Update, context: ContextTypes.DEFAULT_TY
     await update.message.reply_text(
         'Do you urinate frequently?',
         reply_markup=ReplyKeyboardMarkup(
-            reply_keyboard, one_time_keyboard=True,
+            BINARY_KB, one_time_keyboard=True,
             input_field_placeholder='Yes or no?'
         )
     )
@@ -298,7 +293,6 @@ async def has_appetite_increase(update: Update, context: ContextTypes.DEFAULT_TY
 
 
 async def has_freq_urination(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
-    reply_keyboard = [['yes', 'no']]
     user = update.message.from_user
     user_model.has_freq_urination = update.message.text == 'yes'
 
@@ -307,7 +301,7 @@ async def has_freq_urination(update: Update, context: ContextTypes.DEFAULT_TYPE)
     await update.message.reply_text(
         'Do you have nausea?',
         reply_markup=ReplyKeyboardMarkup(
-            reply_keyboard, one_time_keyboard=True,
+            BINARY_KB, one_time_keyboard=True,
             input_field_placeholder='Yes or no?'
         )
     )
@@ -316,7 +310,6 @@ async def has_freq_urination(update: Update, context: ContextTypes.DEFAULT_TYPE)
 
 
 async def has_nausea(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
-    reply_keyboard = [['yes', 'no']]
     user = update.message.from_user
     user_model.has_nausea = update.message.text == 'yes'
 
@@ -325,7 +318,7 @@ async def has_nausea(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     await update.message.reply_text(
         'Do you feel faintness?',
         reply_markup=ReplyKeyboardMarkup(
-            reply_keyboard, one_time_keyboard=True,
+            BINARY_KB, one_time_keyboard=True,
             input_field_placeholder='Yes or no?'
         )
     )
@@ -334,7 +327,6 @@ async def has_nausea(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
 
 
 async def has_faintness(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
-    reply_keyboard = [['yes', 'no']]
     user = update.message.from_user
     user_model.has_faintness = update.message.text == 'yes'
 
@@ -343,7 +335,7 @@ async def has_faintness(update: Update, context: ContextTypes.DEFAULT_TYPE) -> i
     await update.message.reply_text(
         'Do you feel strong thirst at the morning or during the night?',
         reply_markup=ReplyKeyboardMarkup(
-            reply_keyboard, one_time_keyboard=True,
+            BINARY_KB, one_time_keyboard=True,
             input_field_placeholder='Yes or no?'
         )
     )
@@ -352,7 +344,6 @@ async def has_faintness(update: Update, context: ContextTypes.DEFAULT_TYPE) -> i
 
 
 async def has_thirst_morning_night(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
-    reply_keyboard = [['yes', 'no']]
     user = update.message.from_user
     user_model.has_thirst_morning_night = update.message.text == 'yes'
 
@@ -361,7 +352,7 @@ async def has_thirst_morning_night(update: Update, context: ContextTypes.DEFAULT
     await update.message.reply_text(
         'Do you have your wounds heal poorly?',
         reply_markup=ReplyKeyboardMarkup(
-            reply_keyboard, one_time_keyboard=True,
+            BINARY_KB, one_time_keyboard=True,
             input_field_placeholder='Yes or no?'
         )
     )
@@ -370,7 +361,6 @@ async def has_thirst_morning_night(update: Update, context: ContextTypes.DEFAULT
 
 
 async def has_poor_wound_healing(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
-    reply_keyboard = [['yes', 'no']]
     user = update.message.from_user
     user_model.has_poor_wound_healing = update.message.text == 'yes'
 
@@ -379,7 +369,7 @@ async def has_poor_wound_healing(update: Update, context: ContextTypes.DEFAULT_T
     await update.message.reply_text(
         'Have you been diagnosed diabetes before?',
         reply_markup=ReplyKeyboardMarkup(
-            reply_keyboard, one_time_keyboard=True,
+            BINARY_KB, one_time_keyboard=True,
             input_field_placeholder='Yes or no?'
         )
     )
@@ -388,7 +378,6 @@ async def has_poor_wound_healing(update: Update, context: ContextTypes.DEFAULT_T
 
 
 async def has_diabetes(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
-    reply_keyboard = [['yes', 'no']]
     user = update.message.from_user
     user_model.has_diabetes = update.message.text == 'yes'
 
@@ -397,7 +386,7 @@ async def has_diabetes(update: Update, context: ContextTypes.DEFAULT_TYPE) -> in
     await update.message.reply_text(
         'Have your parents been diagnosed with diabetes?',
         reply_markup=ReplyKeyboardMarkup(
-            reply_keyboard, one_time_keyboard=True,
+            BINARY_KB, one_time_keyboard=True,
             input_field_placeholder='Yes or no?'
         )
     )
@@ -406,7 +395,6 @@ async def has_diabetes(update: Update, context: ContextTypes.DEFAULT_TYPE) -> in
 
 
 async def has_parents_diabetes(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
-    reply_keyboard = [['yes', 'no']]
     user = update.message.from_user
     user_model.has_parents_diabetes = update.message.text == 'yes'
 
@@ -415,7 +403,7 @@ async def has_parents_diabetes(update: Update, context: ContextTypes.DEFAULT_TYP
     await update.message.reply_text(
         'Do you have high blood pressure?',
         reply_markup=ReplyKeyboardMarkup(
-            reply_keyboard, one_time_keyboard=True,
+            BINARY_KB, one_time_keyboard=True,
             input_field_placeholder='Yes or no?'
         )
     )
@@ -424,7 +412,6 @@ async def has_parents_diabetes(update: Update, context: ContextTypes.DEFAULT_TYP
 
 
 async def has_high_blood_pressure(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
-    reply_keyboard = [['yes', 'no']]
     user = update.message.from_user
     user_model.has_high_blood_pressure = update.message.text == 'yes'
 
@@ -433,7 +420,7 @@ async def has_high_blood_pressure(update: Update, context: ContextTypes.DEFAULT_
     await update.message.reply_text(
         'Do you have furunculosis?',
         reply_markup=ReplyKeyboardMarkup(
-            reply_keyboard, one_time_keyboard=True,
+            BINARY_KB, one_time_keyboard=True,
             input_field_placeholder='Yes or no?'
         )
     )
@@ -442,7 +429,6 @@ async def has_high_blood_pressure(update: Update, context: ContextTypes.DEFAULT_
 
 
 async def has_furunculosis(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
-    reply_keyboard = [['yes', 'no']]
     user = update.message.from_user
     user_model.has_furunculosis = update.message.text == 'yes'
 
@@ -451,7 +437,7 @@ async def has_furunculosis(update: Update, context: ContextTypes.DEFAULT_TYPE) -
     await update.message.reply_text(
         'Do you have candiasis?',
         reply_markup=ReplyKeyboardMarkup(
-            reply_keyboard, one_time_keyboard=True,
+            BINARY_KB, one_time_keyboard=True,
             input_field_placeholder='Yes or no?'
         )
     )
@@ -460,7 +446,6 @@ async def has_furunculosis(update: Update, context: ContextTypes.DEFAULT_TYPE) -
 
 
 async def has_candidiasis(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
-    reply_keyboard = [['yes', 'no']]
     user = update.message.from_user
     user_model.has_candidiasis = update.message.text == 'yes'
 
@@ -469,7 +454,7 @@ async def has_candidiasis(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
     await update.message.reply_text(
         'Did you have excessive physical activity recently?',
         reply_markup=ReplyKeyboardMarkup(
-            reply_keyboard, one_time_keyboard=True,
+            BINARY_KB, one_time_keyboard=True,
             input_field_placeholder='Yes or no?'
         )
     )
@@ -478,7 +463,6 @@ async def has_candidiasis(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
 
 
 async def has_exc_physical_activity(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
-    reply_keyboard = [['yes', 'no']]
     user = update.message.from_user
     user_model.has_exc_physical_activity = update.message.text == 'yes'
 
@@ -487,7 +471,7 @@ async def has_exc_physical_activity(update: Update, context: ContextTypes.DEFAUL
     await update.message.reply_text(
         'Do you have impaired vision?',
         reply_markup=ReplyKeyboardMarkup(
-            reply_keyboard, one_time_keyboard=True,
+            BINARY_KB, one_time_keyboard=True,
             input_field_placeholder='Yes or no?'
         )
     )
@@ -502,22 +486,21 @@ async def has_impaired_vision(update: Update, context: ContextTypes.DEFAULT_TYPE
     logger.info(f'User {user.first_name} selected {user_model.has_impaired_vision}')
 
     if user_model.has_impaired_vision:
-        reply_keyboard = [['<1 day', '1 day to 1 week', '1 week to 1 month', '1 month to 1 year']]
         await update.message.reply_text(
             'How long do you have it?',
             reply_markup=ReplyKeyboardMarkup(
-                reply_keyboard, one_time_keyboard=True,
+                DURATION_KB, one_time_keyboard=True,
                 input_field_placeholder='Duration'
             )
         )
 
         return IMPAIRED_VISION_DURATION
     else:
-        reply_keyboard = [['yes', 'no']]
+
         await update.message.reply_text(
             'Do you have pain in the leg?',
             reply_markup=ReplyKeyboardMarkup(
-                reply_keyboard, one_time_keyboard=True,
+                BINARY_KB, one_time_keyboard=True,
                 input_field_placeholder='Yes or no?'
             )
         )
@@ -526,7 +509,6 @@ async def has_impaired_vision(update: Update, context: ContextTypes.DEFAULT_TYPE
 
 
 async def impaired_vision_duration(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
-    reply_keyboard = [['yes', 'no']]
     user = update.message.from_user
     user_model.impaired_vision_duration = update.message.text
 
@@ -535,7 +517,7 @@ async def impaired_vision_duration(update: Update, context: ContextTypes.DEFAULT
     await update.message.reply_text(
         'Do you have pain in the leg?',
         reply_markup=ReplyKeyboardMarkup(
-            reply_keyboard, one_time_keyboard=True,
+            BINARY_KB, one_time_keyboard=True,
             input_field_placeholder='Yes or no?'
         )
     )
@@ -561,11 +543,11 @@ async def has_pain_in_leg(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
 
         return PAIN_IN_LEG_INTENSITY
     else:
-        reply_keyboard = [['yes', 'no']]
+
         await update.message.reply_text(
             'Do you have a headache?',
             reply_markup=ReplyKeyboardMarkup(
-                reply_keyboard, one_time_keyboard=True,
+                BINARY_KB, one_time_keyboard=True,
                 input_field_placeholder='Yes or no?'
             )
         )
@@ -574,7 +556,6 @@ async def has_pain_in_leg(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
 
 
 async def pain_in_leg_intensity(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
-    reply_keyboard = [['yes', 'no']]
     user = update.message.from_user
     user_model.pain_in_leg_intensity = update.message.text
     logger.info(f'User {user.first_name} selected {user_model.pain_in_leg_intensity}')
@@ -582,7 +563,7 @@ async def pain_in_leg_intensity(update: Update, context: ContextTypes.DEFAULT_TY
     await update.message.reply_text(
         'Do you have a headache?',
         reply_markup=ReplyKeyboardMarkup(
-            reply_keyboard, one_time_keyboard=True,
+            BINARY_KB, one_time_keyboard=True,
             input_field_placeholder='Yes or no?'
         )
     )
@@ -608,12 +589,12 @@ async def has_headache(update: Update, context: ContextTypes.DEFAULT_TYPE) -> in
 
         return HEADACHE_LOCATION
     else:
-        reply_keyboard = [['yes', 'no']]
+
         if user_model.has_headache:
             await update.message.reply_text(
                 'Do you feel dizzy?',
                 reply_markup=ReplyKeyboardMarkup(
-                    reply_keyboard, one_time_keyboard=True,
+                    BINARY_KB, one_time_keyboard=True,
                     input_field_placeholder='Yes or no?'
                 )
             )
@@ -622,7 +603,6 @@ async def has_headache(update: Update, context: ContextTypes.DEFAULT_TYPE) -> in
 
 
 async def headache_location(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
-    reply_keyboard = [['<1 day', '1 day to 1 week', '1 week to 1 month', '1 month to 1 year']]
     user = update.message.from_user
     user_model.headache_location = update.message.text == 'yes'
 
@@ -631,7 +611,7 @@ async def headache_location(update: Update, context: ContextTypes.DEFAULT_TYPE) 
     await update.message.reply_text(
         'For how long?',
         reply_markup=ReplyKeyboardMarkup(
-            reply_keyboard, one_time_keyboard=True,
+            DURATION_KB, one_time_keyboard=True,
             input_field_placeholder='Duration'
         )
     )
@@ -658,7 +638,6 @@ async def headache_duration(update: Update, context: ContextTypes.DEFAULT_TYPE) 
 
 
 async def headache_intensity(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
-    reply_keyboard = [['yes', 'no']]
     user = update.message.from_user
     user_model.headache_intensity = update.message.text
 
@@ -667,7 +646,7 @@ async def headache_intensity(update: Update, context: ContextTypes.DEFAULT_TYPE)
     await update.message.reply_text(
         'Do you feel dizzy?',
         reply_markup=ReplyKeyboardMarkup(
-            reply_keyboard, one_time_keyboard=True,
+            BINARY_KB, one_time_keyboard=True,
             input_field_placeholder='Yes or no?'
         )
     )
@@ -682,18 +661,16 @@ async def has_dizziness(update: Update, context: ContextTypes.DEFAULT_TYPE) -> i
     logger.info(f'User {user.first_name} selected {user_model.has_dizziness}')
 
     if user_model.has_dizziness:
-        reply_keyboard = [['<1 day', '1 day to 1 week', '1 week to 1 month', '1 month to 1 year']]
         await update.message.reply_text(
             'For how long?',
             reply_markup=ReplyKeyboardMarkup(
-                reply_keyboard, one_time_keyboard=True,
+                DURATION_KB, one_time_keyboard=True,
                 input_field_placeholder='Duration'
             )
         )
 
         return DIZZINESS_DURATION
     else:
-        # reply_keyboard = [['yes', 'no']]
         await update.message.reply_text(
             str(user_model)
         )
@@ -702,7 +679,6 @@ async def has_dizziness(update: Update, context: ContextTypes.DEFAULT_TYPE) -> i
 
 
 async def dizziness_duration(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
-    reply_keyboard = [['mild', 'moderate', 'active']]
     user = update.message.from_user
     user_model.dizziness_duration = update.message.text == 'yes'
 
@@ -711,7 +687,7 @@ async def dizziness_duration(update: Update, context: ContextTypes.DEFAULT_TYPE)
     await update.message.reply_text(
         'How intense?',
         reply_markup=ReplyKeyboardMarkup(
-            reply_keyboard, one_time_keyboard=True,
+            INTENSITY_KB, one_time_keyboard=True,
             input_field_placeholder='Intensity'
         )
     )
@@ -720,7 +696,6 @@ async def dizziness_duration(update: Update, context: ContextTypes.DEFAULT_TYPE)
 
 
 async def dizziness_intensity(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
-    reply_keyboard = [['yes', 'no']]
     user = update.message.from_user
     user_model.dizziness_intensity = update.message.text == 'yes'
 
@@ -729,7 +704,7 @@ async def dizziness_intensity(update: Update, context: ContextTypes.DEFAULT_TYPE
     await update.message.reply_text(
         'Dizziness inteferes in your daily activities?',
         reply_markup=ReplyKeyboardMarkup(
-            reply_keyboard, one_time_keyboard=True,
+            BINARY_KB, one_time_keyboard=True,
             input_field_placeholder='Yes or no?'
         )
     )
@@ -738,7 +713,6 @@ async def dizziness_intensity(update: Update, context: ContextTypes.DEFAULT_TYPE
 
 
 async def dizziness_interferes(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
-    reply_keyboard = [['yes', 'no']]
     user = update.message.from_user
     user_model.dizziness_interferes = update.message.text == 'yes'
 
