@@ -47,6 +47,7 @@ GENDER_KB = [['male', 'female']]
 ACTIVITY_KB = [['mild', 'moderate', 'active']]
 INTENSITY_KB = [['mild', 'moderate', 'intense']]
 DURATION_KB = [['<1 day', '1 day to 1 week', '1 week to 1 month', '1 month to 1 year']]
+HEADACHE_LOCATION_KB = [['left', 'right', 'both', 'center']]
 
 INTEGER_REGEX = filters.Regex('^[0-9]')
 BINARY_REGEX = kb2regex(BINARY_KB)
@@ -54,6 +55,7 @@ GENDER_REGEX = kb2regex(GENDER_KB)
 ACTIVITY_REGEX = kb2regex(ACTIVITY_KB)
 INTENSITY_REGEX = kb2regex(INTENSITY_KB)
 DURATION_REGEX = kb2regex(DURATION_KB)
+HEADACHE_LOCATION_REGEX = kb2regex(HEADACHE_LOCATION_KB)
 
 (
     GENDER, AGE, IS_PREGNANT, WEIGHT, HEIGHT,
@@ -374,7 +376,7 @@ async def has_headache(update: Update, context: ContextTypes.DEFAULT_TYPE) -> in
     logger.info(f'User {user.id} selected {users[user.id].has_headache}')
 
     if users[user.id].has_headache:
-        await ask_optional(update, 'Where?', [['left', 'right', 'both', 'center']])
+        await ask_optional(update, 'Where?', HEADACHE_LOCATION_KB)
         return HEADACHE_LOCATION
     else:
         await ask_optional(update, 'Do you feel dizzy?', BINARY_KB)
@@ -452,16 +454,10 @@ async def dizziness_interferes(update: Update, context: ContextTypes.DEFAULT_TYP
 async def cancel(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     user = update.message.from_user
     logger.info(f"User {user.id} canceled the conversation")
-
     del users[user.id]
-
     logger.info(f"User {user.id} was deleted")
 
-    await update.message.reply_text(
-        "Bye!",
-        reply_markup=ReplyKeyboardRemove()
-    )
-
+    await update.message.reply_text("Bye!", reply_markup=ReplyKeyboardRemove())
     return ConversationHandler.END
 
 
@@ -470,114 +466,42 @@ if __name__ == '__main__':
     handler = ConversationHandler(
         entry_points=[CommandHandler('start', start)],
         states={
-            AGE: [
-                MessageHandler(INTEGER_REGEX, age)
-            ],
-            GENDER: [
-                MessageHandler(GENDER_REGEX, gender)
-            ],
-            IS_PREGNANT: [
-                MessageHandler(BINARY_REGEX, is_pregnant)
-            ],
-            WEIGHT: [
-                MessageHandler(INTEGER_REGEX, weight)
-            ],
-            HEIGHT: [
-                MessageHandler(INTEGER_REGEX, height)
-            ],
-            ACTIVITY_LEVEL: [
-                MessageHandler(ACTIVITY_REGEX, activity_level)
-            ],
-            HAS_SMOKING_HABIT: [
-                MessageHandler(BINARY_REGEX, has_smoking_habit)
-            ],
-            HAS_ALCOHOL_HABIT: [
-                MessageHandler(BINARY_REGEX, has_alcohol_habit)
-            ],
-            HAS_ART_HYPERTENSION: [
-                MessageHandler(BINARY_REGEX, has_art_hypertension)
-            ],
-            HAS_PARENTS_HYPERTENSION: [
-                MessageHandler(BINARY_REGEX, has_parents_hypertension)
-            ],
-            HAS_BURNING_SENSATION: [
-                MessageHandler(BINARY_REGEX, has_burning_sensation)
-            ],
-            HAS_LOSE_WEIGHT: [
-                MessageHandler(BINARY_REGEX, has_lose_weight)
-            ],
-            HAS_APPETITE_INCREASE: [
-                MessageHandler(BINARY_REGEX, has_appetite_increase)
-            ],
-            HAS_FREQUENT_URINATION: [
-                MessageHandler(BINARY_REGEX, has_freq_urination)
-            ],
-            HAS_NAUSEA: [
-                MessageHandler(BINARY_REGEX, has_nausea)
-            ],
-            HAS_FAINTNESS: [
-                MessageHandler(BINARY_REGEX, has_faintness)
-            ],
-            HAS_THIRST_MORNING_NIGHT: [
-                MessageHandler(BINARY_REGEX, has_poor_wound_healing)
-            ],
-            HAS_POOR_WOUND_HEALING: [
-                MessageHandler(BINARY_REGEX, has_poor_wound_healing)
-            ],
-            HAS_DIABETES: [
-                MessageHandler(BINARY_REGEX, has_diabetes)
-            ],
-            HAS_PARENTS_DIABETES: [
-                MessageHandler(BINARY_REGEX, has_parents_diabetes)
-            ],
-            HAS_HIGH_BLOOD_PRESSURE: [
-                MessageHandler(BINARY_REGEX, has_high_blood_pressure)
-            ],
-            HAS_FURUNCULOSIS: [
-                MessageHandler(BINARY_REGEX, has_furunculosis)
-            ],
-            HAS_CANDIASIS: [
-                MessageHandler(BINARY_REGEX, has_candidiasis)
-            ],
-            HAS_EXC_PHYSICAL_ACTIVITY: [
-                MessageHandler(BINARY_REGEX, has_exc_physical_activity)
-            ],
-            HAS_IMPAIRED_VISION: [
-                MessageHandler(BINARY_REGEX, has_impaired_vision)
-            ],
-            IMPAIRED_VISION_DURATION: [
-                MessageHandler(DURATION_REGEX, impaired_vision_duration)
-            ],
-            HAS_PAIN_IN_LEG: [
-                MessageHandler(BINARY_REGEX, has_pain_in_leg)
-            ],
-            PAIN_IN_LEG_INTENSITY: [
-                MessageHandler(INTENSITY_REGEX, pain_in_leg_intensity)
-            ],
-            HAS_HEADACHE: [
-                MessageHandler(BINARY_REGEX, has_headache)
-            ],
-            HEADACHE_LOCATION: [
-                MessageHandler(filters.Regex('left|right|both|center'), headache_location)
-            ],
-            HEADACHE_DURATION: [
-                MessageHandler(DURATION_REGEX, headache_duration)
-            ],
-            HEADACHE_INTENSITY: [
-                MessageHandler(INTENSITY_REGEX, headache_intensity)
-            ],
-            HAS_DIZZINESS: [
-                MessageHandler(BINARY_REGEX, has_dizziness)
-            ],
-            DIZZINESS_DURATION: [
-                MessageHandler(DURATION_REGEX, dizziness_duration)
-            ],
-            DIZZINESS_INTENSITY: [
-                MessageHandler(INTENSITY_REGEX, dizziness_intensity)
-            ],
-            DIZZINESS_INTERFERES: [
-                MessageHandler(BINARY_REGEX, dizziness_interferes)
-            ]
+            AGE: [MessageHandler(INTEGER_REGEX, age)],
+            GENDER: [MessageHandler(GENDER_REGEX, gender)],
+            IS_PREGNANT: [MessageHandler(BINARY_REGEX, is_pregnant)],
+            WEIGHT: [MessageHandler(INTEGER_REGEX, weight)],
+            HEIGHT: [MessageHandler(INTEGER_REGEX, height)],
+            ACTIVITY_LEVEL: [MessageHandler(ACTIVITY_REGEX, activity_level)],
+            HAS_SMOKING_HABIT: [MessageHandler(BINARY_REGEX, has_smoking_habit)],
+            HAS_ALCOHOL_HABIT: [MessageHandler(BINARY_REGEX, has_alcohol_habit)],
+            HAS_ART_HYPERTENSION: [MessageHandler(BINARY_REGEX, has_art_hypertension)],
+            HAS_PARENTS_HYPERTENSION: [MessageHandler(BINARY_REGEX, has_parents_hypertension)],
+            HAS_BURNING_SENSATION: [MessageHandler(BINARY_REGEX, has_burning_sensation)],
+            HAS_LOSE_WEIGHT: [MessageHandler(BINARY_REGEX, has_lose_weight)],
+            HAS_APPETITE_INCREASE: [MessageHandler(BINARY_REGEX, has_appetite_increase)],
+            HAS_FREQUENT_URINATION: [MessageHandler(BINARY_REGEX, has_freq_urination)],
+            HAS_NAUSEA: [MessageHandler(BINARY_REGEX, has_nausea)],
+            HAS_FAINTNESS: [MessageHandler(BINARY_REGEX, has_faintness)],
+            HAS_THIRST_MORNING_NIGHT: [MessageHandler(BINARY_REGEX, has_poor_wound_healing)],
+            HAS_POOR_WOUND_HEALING: [MessageHandler(BINARY_REGEX, has_poor_wound_healing)],
+            HAS_DIABETES: [MessageHandler(BINARY_REGEX, has_diabetes)],
+            HAS_PARENTS_DIABETES: [MessageHandler(BINARY_REGEX, has_parents_diabetes)],
+            HAS_HIGH_BLOOD_PRESSURE: [MessageHandler(BINARY_REGEX, has_high_blood_pressure)],
+            HAS_FURUNCULOSIS: [MessageHandler(BINARY_REGEX, has_furunculosis)],
+            HAS_CANDIASIS: [MessageHandler(BINARY_REGEX, has_candidiasis)],
+            HAS_EXC_PHYSICAL_ACTIVITY: [MessageHandler(BINARY_REGEX, has_exc_physical_activity)],
+            HAS_IMPAIRED_VISION: [MessageHandler(BINARY_REGEX, has_impaired_vision)],
+            IMPAIRED_VISION_DURATION: [MessageHandler(DURATION_REGEX, impaired_vision_duration)],
+            HAS_PAIN_IN_LEG: [MessageHandler(BINARY_REGEX, has_pain_in_leg)],
+            PAIN_IN_LEG_INTENSITY: [MessageHandler(INTENSITY_REGEX, pain_in_leg_intensity)],
+            HAS_HEADACHE: [MessageHandler(BINARY_REGEX, has_headache)],
+            HEADACHE_LOCATION: [MessageHandler(HEADACHE_LOCATION_REGEX, headache_location)],
+            HEADACHE_DURATION: [MessageHandler(DURATION_REGEX, headache_duration)],
+            HEADACHE_INTENSITY: [MessageHandler(INTENSITY_REGEX, headache_intensity)],
+            HAS_DIZZINESS: [MessageHandler(BINARY_REGEX, has_dizziness)],
+            DIZZINESS_DURATION: [MessageHandler(DURATION_REGEX, dizziness_duration)],
+            DIZZINESS_INTENSITY: [MessageHandler(INTENSITY_REGEX, dizziness_intensity)],
+            DIZZINESS_INTERFERES: [MessageHandler(BINARY_REGEX, dizziness_interferes)]
         },
         fallbacks=[CommandHandler('cancel', cancel)],
     )
