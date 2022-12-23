@@ -33,7 +33,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 BINARY_KB = [['yes', 'no']]
-INTENSITY_KB = [['mild', 'moderate', 'active']]
+INTENSITY_KB = [['mild', 'moderate', 'intense']]
 DURATION_KB = [['<1 day', '1 day to 1 week', '1 week to 1 month', '1 month to 1 year']]
 
 (
@@ -154,7 +154,7 @@ async def height(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     await update.message.reply_text(
         'What is your physical activity level?',
         reply_markup=ReplyKeyboardMarkup(
-            INTENSITY_KB, one_time_keyboard=True,
+            [['mild', 'moderate', 'active']], one_time_keyboard=True,
             input_field_placeholder='How active are you?'
         )
     )
