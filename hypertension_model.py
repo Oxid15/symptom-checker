@@ -86,7 +86,7 @@ class HypertensionModel:
                              "cognitive impairment and dementia in old age. Intensive therapy of hypertension "
                              "reduces the risks of cognitive impairment and dementia.")
 
-        if user.gander == 'female' and user.is_pregnant:
+        if user.gender == 'female' and user.is_pregnant:
             recommend.append("Hypertension and its associated complications still remain one of the main causes "
                              "of morbidity and mortality of the mother, fetus and newborn.")
 
