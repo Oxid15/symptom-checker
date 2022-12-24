@@ -70,10 +70,10 @@ class DiabetesModel:
                          "\nAlcohol drinking should be limited to 1 unit for women and 2 units for men per day to prevent "
                          "hypoglycemia. One unit corresponds to 15 g of ethanol, or about 40 g of spirits, or 140 g of wine, or 300 g of beer. ")
 
-        if user.is_pregnant:
+        if user.gender == 'female' and user.is_pregnant:
             recommend.append('Gestational diabetes is a condition in which a woman without diabetes develops high blood '
-                             'sugar levels during pregnancy. The child and the mother who has undergone gestational '
-                             'diabetes should monitor the level of sugar to prevent type 2 diabetes. Long term, children'
-                             ' are at higher risk of being overweight and of developing type 2 diabetes.')
+                            'sugar levels during pregnancy. The child and the mother who has undergone gestational '
+                            'diabetes should monitor the level of sugar to prevent type 2 diabetes. Long term, children'
+                            ' are at higher risk of being overweight and of developing type 2 diabetes.')
 
         return '\n'.join(recommend)
