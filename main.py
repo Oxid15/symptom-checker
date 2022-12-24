@@ -92,6 +92,17 @@ async def ask_optional(update: Update, text: str, kb: List[List[str]]):
     )
 
 
+def end_conversation(user_id) -> str:
+    user = users[user_id]
+    response = model.check(user)
+
+    logger.info(f"User {user_id} canceled the conversation")
+    del users[user_id]
+    logger.info(f"User {user_id} was deleted")
+
+    return response
+
+
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     """
     Entry point into the dialogue.
@@ -422,9 +433,7 @@ async def has_dizziness(update: Update, context: ContextTypes.DEFAULT_TYPE) -> i
         await ask_optional(update, 'For how long?', DURATION_KB)
         return DIZZINESS_DURATION
     else:
-        # INFERENCE
-        response = model.check(users[user.id])
-
+        response = end_conversation(user.id)
         await update.message.reply_text(response)
         return ConversationHandler.END
 
@@ -452,9 +461,7 @@ async def dizziness_interferes(update: Update, context: ContextTypes.DEFAULT_TYP
     users[user.id].dizziness_interferes = update.message.text == 'yes'
     logger.info(f'User {user.id} selected {users[user.id].dizziness_interferes}')
 
-    # INFERENCE
-    response = model.check(users[user.id])
-
+    response = end_conversation(user.id)
     await update.message.reply_text(response)
     return ConversationHandler.END
 
