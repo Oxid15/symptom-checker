@@ -497,7 +497,7 @@ if __name__ == '__main__':
             HAS_FREQUENT_URINATION: [MessageHandler(BINARY_REGEX, has_freq_urination)],
             HAS_NAUSEA: [MessageHandler(BINARY_REGEX, has_nausea)],
             HAS_FAINTNESS: [MessageHandler(BINARY_REGEX, has_faintness)],
-            HAS_THIRST_MORNING_NIGHT: [MessageHandler(BINARY_REGEX, has_poor_wound_healing)],
+            HAS_THIRST_MORNING_NIGHT: [MessageHandler(BINARY_REGEX, has_thirst_morning_night)],
             HAS_POOR_WOUND_HEALING: [MessageHandler(BINARY_REGEX, has_poor_wound_healing)],
             HAS_DIABETES: [MessageHandler(BINARY_REGEX, has_diabetes)],
             HAS_PARENTS_DIABETES: [MessageHandler(BINARY_REGEX, has_parents_diabetes)],
