@@ -35,7 +35,7 @@ class HypertensionModel:
             'gender': {'male>55': 6, 'female>65': 3, 'female': 0, 'male': 0},
             'alcohol': {'every day': 8, 'once a week': 2, 'on holidays': 0, 'quit': 0, 'no': 0},  # todo
             'smoker': {'a lot': 5, 'quit': 0, 'no': 0},  # todo
-            'activity': {'mild': 5, 'moderate': 1, 'severe': 0},
+            'activity': {'mild': 5, 'moderate': 1, 'active': 0},
             'parents hypertension': 8,
             'bmi': {'<25': 0, '25-30': 5, '30>': 10},
             'heart beat': {'<80': 0, '80>': 4},
