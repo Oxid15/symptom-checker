@@ -131,4 +131,4 @@ class HypertensionModel:
                          "\nThe main purpose of hypertension therapy is not to reduce pressure, but to protect the "
                          "heart, kidneys, blood vessels, brain – target organs that can suffer from untreated high pressure.")
 
-        return '\n'.join(recommend)
+        return '\n\n'.join(recommend)
