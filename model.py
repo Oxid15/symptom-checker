@@ -10,7 +10,7 @@ class SymptomChecker:
 
     def check(self, user: UserModel) -> str:
         if user.age < 18:
-            return 'no children'
+            return "This checker doesn't work with children"
 
         hyper = self._hypertension_model.symptoms(user)
         diab = self._diabetes_model.symptoms(user)
@@ -19,5 +19,3 @@ class SymptomChecker:
             return self._hypertension_model.recommendations(user)
         elif diab:
             return self._diabetes_model.recommendations(user)
-        else:
-            return "there's nothing wrong with you"

@@ -88,29 +88,37 @@ class HypertensionModel:
 
         if user.gender == 'female' and user.is_pregnant:
             recommend.append("Hypertension and its associated complications still remain one of the main causes "
-                             "of morbidity and mortality of the mother, fetus and newborn.")
+                             "of morbidity and mortality of the mother, fetus and newborn."
+                             "Consult your doctor as soon as possible, as it may be vital for your "
+                             "and your child's health.")
 
         recommend.append("However, the crucial effects of hypertension can be reduced with simple recommendations:"
                          "\nAdd more vegetables to your diet, and decrease the amount of animal fats. "
                          "Food rich in potassium and calcium (vegetables, fruits, cereals), and magnesium "
                          "(dairy products) should be added to your daily ration. "
-                         "\nReduce the consumption of table salt to 5 g/day. ")
+                         "\nReduce the consumption of table salt to 5 g/day. "
+                         "\nLimit consumption of coffee and other caffeine-rich products, "
+                         "as caffeine increases blood pressure .")
 
         if user.activity_level != 'active':
-            recommend.append("Add regular aerobic physical activity for 30-40 minutes at least 4 times a week.")
+            recommend.append("Add aerobic physical activity for 30-40 minutes at least 4 times a week."
+                             "Regular exercise can reduce blood pressure.")
 
         if user.has_smoking_habit:
-            recommend.append("Quit smoking.")
+            recommend.append("Smoking has a negative impact on your condition; "
+                             "however, quitting will help you feel better.")
 
         if bmi > 25:
-            recommend.append("Normalize your body mass (BMI < 25 kg/m2)")
+            recommend.append("Maintain a healthy body mass index (BMI < 25 kg/m2)."
+                             "Remember that a small amount of weight loss may still be beneficial, and a larger "
+                             "amount will have advantageous metabolic impact in the long term.")
 
         if user.has_alcohol_habit:
-            recommend.append("limit alcohol consumption:")
+            recommend.append("Limit alcohol consumption. This can reduce blood pressure and has broader health benefits.")
             if user.gender == 'male':
-                recommend.append("14 units per week (1 unit is about 125 ml of wine or 230 ml of beer)")
+                recommend.append("14 units per week is okay (1 unit is about 125 ml of wine or 230 ml of beer)")
             else:
-                recommend.append("7 units per week (1 unit is about 125 ml of wine or 230 ml of beer)")
+                recommend.append("7 units per week is okay (1 unit is about 125 ml of wine or 230 ml of beer)")
 
         if user.has_diabetes:
             recommend.append("Increase physical activity and opt for a low-calorie diet with limiting the consumption "
@@ -122,13 +130,14 @@ class HypertensionModel:
                              "blood pressure even when they feel well.")
 
         recommend.append("Hypertension may occur even with a healthy lifestyle. The cause may be heredity. "
-                         "But sometimes secondary hypertension develops – due to the pathology of the "
+                         "But sometimes secondary hypertension develops due to the pathology of the "
                          "endocrine system or kidneys, which are involved in pressure control."
                          "\nWe recommend you to visit the doctor, as hypertension is usually diagnosed by accident. "
                          "The earlier the therapy starts, the higher the probability that drugs would not be necessary "
                          "for you. Before your visit to the cardiologist, you can track your blood pressure for a week. "
                          "For that measure your blood pressure at rest every morning and evening and when you feel bad. "
-                         "\nThe main purpose of hypertension therapy is not to reduce pressure, but to protect the "
+                         "Do not measure the pressure immediately after eating or exercising. "
+                         "\nThe main purpose of hypertension therapy is not only to reduce pressure, but to protect the "
                          "heart, kidneys, blood vessels, brain – target organs that can suffer from untreated high pressure.")
 
         return '\n\n'.join(recommend)
