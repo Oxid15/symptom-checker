@@ -113,7 +113,14 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     users[user.id].name = user.first_name
     logger.info(f'User {user.id} started')
 
-    await update.message.reply_text(f'Hi {user.first_name}! This is symptom checker, what is your age?')
+    await update.message.reply_text(
+        f'Hi {user.first_name}!\n'
+        'This bot is a project of a group J-42325c which is built to check '
+        'the symptoms of users for the presence of diabetes or hypertension.\n'
+        'You will be asked to answer the questions and in the end you will get '
+        'your alleged diagnosis and a set of recommendations based on your symptoms.\n\n'
+        'Let\'s start now, first question is:\n'
+        'What is your age?')
     return AGE
 
 
