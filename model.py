@@ -19,3 +19,5 @@ class SymptomChecker:
             return self._hypertension_model.recommendations(user)
         elif diab:
             return self._diabetes_model.recommendations(user)
+        else:
+            return 'The system was not able to diagnose you with anything'  # We need to come up with some answer for this case also
