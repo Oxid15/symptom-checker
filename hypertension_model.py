@@ -190,9 +190,9 @@ class HypertensionModel:
         #Calculating the Spatial Difference between the User Vector & Symptom Vector
         SS = distance.hamming(HYPER_VECTOR,FINAL))
         ANS = 1.0-SS
-    return ANS
+        
+        return ANS
 
-        return FINAL
 
     def recommendations(self, user: UserModel) -> str:
         bmi = bmi_func(user)
