@@ -2,71 +2,296 @@ from user_model import UserModel
 from utils import bmi as bmi_func
 
 
+
 class HypertensionModel:
-    def symptoms(self, user: UserModel):
-        bmi = bmi_func(user)
-        if user.gender == 'male':
-            if (user.age > 55 or
-                    user.has_smoking_habit or
-                    user.has_alcohol_habit == 'every day' or
-                    user.activity_level == 'mild' or
-                    user.has_parents_hypertension or
-                    bmi > 25 or
-                    # user.heart_beat_per_sec > 80 or
-                    user.has_high_blood_pressure or
-                    user.has_diabetes):
-                return True
+    def analysis(self, user: Usermodel):
+        
+        #  Array to hold state
+        FINAL = []
+        
+        
+        # [ 1, 2, 3 & 4, 5, 6, 7 & 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
+        
+        # The Ideal Scenario for Hypertension
+        # [ 2, 0,     2, 1, 2,     2, 2,  2,  1,  0,  1,  0,  1,  1,  0,  3,  3] - # BEST
+        # [ 1,        1,  , 1,     1, 1,  1,                              2,  2] - # op 2
+        # [                                                               1,  1] - # op 3 
+        
+        #----------------------------------
+        #1
+        # Age Based 
+        
+        #IF Age > 55 & <=64 condition = 1
+        #IF Age <=65 condition = 2
+        #else condition = 0 
+        
+        if user.age >= 55 and user.age <=64:
+            FINAL.append(1)
+            
+        elif user.age >= 65:
+            FINAL.append(2)
+            
         else:
-            if (user.age > 65 or
-                    user.has_smoking_habit or
-                    user.has_alcohol_habit == 'every day' or
-                    user.activity_level == 'mild' or
-                    user.has_parents_hypertension or
-                    bmi > 25 or
-                    # user.heart_beat_per_sec > 80 or
-                    user.has_high_blood_pressure or
-                    user.has_diabetes):
-                return True
-
-    def score(self, user: UserModel):
+            FINAL.append(0)
+            
+        #----------------------------------
+                
+        #2
+        # Gender, regardless of Men or Women, both are prone to HP & Dia 
+        # When Pregnant, the Blood pressure of Women is lower. hence the risk to HP is variable, 
+        if user.is_pregnant == 1:
+            FINAL.append(1)
+            
+        #----------------------------------
+        
+        #3 & 4
+        # Weight & Height 
+        
+        w = user.weight 
+        h = user.height
+        
+        
+        # if underweight Condition = 2
+        # if overweight Condition = 1
+        # if Normal Condition = 0
+        
+        
+        # Underweight Conditions
+        if (h < 160 and w < 45 or
+        h > 161 and h < 170 and w > 46 and w < 52 or
+        h > 171 and h < 180 and w > 53 and w < 60 or
+        h > 181 and h < 190 and w > 61 and w < 65 or
+        h > 191 and w > 72):
+            FINAL.append(2)
+        
+        # Overweight Conditions
+        elif (h < 160 and w < 70 or
+        h > 161 and h < 170 and w > 71 and w < 81 or
+        h > 171 and h < 180 and w > 82 and w < 95 or
+        h > 181 and h < 190 and w > 96 and w < 110 or
+        h > 191 and w > 111):
+            FINAL.append(1)
+            
+        else:
+            FINAL.append(0)
+            
+        
+        #----------------------------------
+        
+        #5
+        # BMI 
+        
+        # If BMI < 18.5 = LOW  => 0
+        # If BMI >= 18.5 && BMI =< 25 = Normal  => 0
+        # If BMI >= 25.1 = HIGH  => 1
+        
         bmi = bmi_func(user)
+        
+        if bmi >= 25.1:
+            FINAL.append(1)
+        else:
+            FINAL.append(0)
+            
+        #----------------------------------
+        
+        #6
+        # Activity Level 
+        
+        # if Activity is Occaisional = 2
+        # if Activity is light exerc = 1
+        # if Activity is Active      = 0
+        
+        act = user.activity_level 
+        
+        if act == 'Occasional (<30 mins a week)':
+            FINAL.append(2)
+         
+        if act == 'Light Exercise (30 - 90 mins a Week)':
+            FINAL.append(1)
+        
+        if act == 'Active (> 120 mins a Week)':
+            FINAL.append(0)
+        
+        #----------------------------------
+        
+        #7 & 8 
+        #Smoking & Alcohol 
+        # Smoker = 1
+        # non smoker = 0
+        # Alcohol = 1
+        # Non alcohol = 0 
+        # if smoker & Alcohol = 2
+        
+        
+        if user.has_smoking_habit == 1 and user.has_alcohol_habit == 1:
+            FINAL.append(2)
+        elif user.has_smoking_habit == 1 or user.has_alcohol_habit == 1: 
+            FINAL.append(1)
+        else:
+            FINAL.append(0)
+            
+        
+        #----------------------------------
+        
+        #9
+        # Has Diabetes, state = 1
+        # Has Hypertension, state = 2        
+        
+        if user.has_art_hypertension == 1:
+            FINAL.append(2)
+        elif user.has_diabetes == 1:
+            FINAL.append(1)
+        else:
+            FINAL.append(0)
+            
+        #----------------------------------
+                                
+        #10
+        # If Parents Has Diabetes, state = 1 
+        # if Parents Had Hypertension, state = 2
+        
+        if user.has_parents_hypertension == 1:
+            FINAL.append(2)
+        elif user.has_parents_diabetes == 1:
+            FINAL.append(1)
+        else:
+            FINAL.append(0)
+            
+        #----------------------------------
+        
+        # 11
+        
+        # if Burning Sensation = yes, state = 1
+        # if Burning Sensation = no, state = 0
+        
+        if user.has_burning_sensation == 1:
+            FINAL.append(1)
+        else:
+            FINAL.append(0)
+        
+        #----------------------------------
+        
+        # 12
+        
+        # if Weight loss = yes, state = 1
+        # if Weight loss = no, state = 0
+        
+        if user.has_lose_weight == 1:
+            FINAL.append(1)
+        else:
+            FINAL.append(0)
+        
+        #----------------------------------
+        
+        # 13
+        
+        # if Dehydration Sensation = yes, state = 1
+        # if Dehydration Sensation = no, state = 0
+        
+        if user.has_thirst_morning_night == 1:
+            FINAL.append(1)
+        else:
+            FINAL.append(0)
+        
+        #----------------------------------
+        
+        # 14
+        
+        # if Freq Urination = yes, state = 1
+        # if Freq Urination = no, state = 0
+        
+        if user.has_freq_urination == 1:
+            FINAL.append(1)
+        else:
+            FINAL.append(0)
+        
+        #----------------------------------
+        
+        # 15
+        
+        # if Nausea = yes, state = 1
+        # if Nausea = no, state = 0
+        
+        if user.has_nausea == 1:
+            FINAL.append(1)
+        else:
+            FINAL.append(0)
+        
+        #----------------------------------
+        
+        # 16
+        
+        # if Fainting = yes, state = 1
+        # if Fainting = no, state = 0
+        
+        if user.has_faintness == 1:
+            FINAL.append(1)
+        else:
+            FINAL.append(0)
+        
+        #----------------------------------
+        
+        # 17
+        
+        # if Poor wound healing = yes, state = 1
+        # if Poor wound healing = no, state = 0
+        
+        if user.has_poor_wound_healing == 1:
+            FINAL.append(1)
+        else:
+            FINAL.append(0)
+        
+        #----------------------------------
+        
+        # 18
+        
+        # if impaired vision = yes, 
+        # less than 1 day , state = 2
+        # 1 day to 1 week, state = 3
+        # 1 week to 1 month, state = 1
+        # 1 month to 1 year, state = 0
+        
+        # if impaired vision = no, state = 0
+        
+        if user.has_impaired_vision == 1:
+            if user.impaired_vision_duration == 'Less than 1 Day':
+                FINAL.append(2)
+            elif user.impaired_vision_duration == '1 Day to 1 Week':
+                FINAL.append(3)
+            elif user.impaired_vision_duration == '1 Week to 1 Month' :
+                FINAL.append(1)
+            else:
+                FINAL.append(0)
+        else:
+            FINAL.append(0)
+        
+        #----------------------------------
+        
+        # 19
+        
+        # if Pain in the leg = yes, 
+        #OR intensity = Mild , state = 1
+        #OR intensity = Moderate  state = 2
+        #OR intensity = Severe , state = 3       
+        # if has_pain_in_leg = no, state = 0
+        
+        if user.has_pain_in_leg == 1:
+            if pain_in_leg_intensiy == 'Mild':
+                FINAL.append(1)
+            elif pain_in_leg_intensiy == 'Moderate':
+                FINAL.append(2)
+            elif pain_in_leg_intensiy == 'Severe':
+                FINAL.append(3)
+        else:
+            FINAL.append(0)
+        
+        #----------------------------------
+        
+    return FINAL
 
-        scoring = {
-            'gender': {'male>55': 6, 'female>65': 3, 'female': 0, 'male': 0},
-            'alcohol': {'every day': 8, 'once a week': 2, 'on holidays': 0, 'quit': 0, 'no': 0},  # todo
-            'smoker': {'a lot': 5, 'quit': 0, 'no': 0},  # todo
-            'activity': {'mild': 5, 'moderate': 1, 'active': 0},
-            'parents hypertension': 8,
-            'bmi': {'<25': 0, '25-30': 5, '30>': 10},
-            'heart beat': {'<80': 0, '80>': 4},
-            'diabetes': 5,
-            'high bp': 8
-        }
-        score = 0
-        if user.gender == 'male' and user.age > 55:
-            score += scoring['gender']['male>55']
-        elif user.gender == 'female' and user.age > 65:
-            score += scoring['gender']['female>65']
-        elif user.activity_level:
-            score += scoring['activity'][user.activity_level]
-        elif user.has_smoking_habit:
-            score += scoring['smoker'][user.has_smoking_habit]
-        elif user.alcohol:
-            score += scoring['alcohol'][user.alcohol]
-        elif user.has_parents_hypertension:
-            score += scoring['parents hypertension']
-        elif bmi > 30:
-            score += scoring['bmi']['30>']
-        elif 25 < bmi < 30:
-            score += scoring['bmi']['25-30']
-        elif user.heart_beat_per_sec > 80:
-            score += scoring['heart beat']['80>']
-        elif user.has_diabetes:
-            score += scoring['diabetes']
-        elif user.has_high_blood_pressure:
-            score += scoring['high bp']
-        # highest score is 59
-        return score
+
+
+
 
     def recommendations(self, user: UserModel) -> str:
         score = self.score(user)
