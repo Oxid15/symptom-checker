@@ -12,8 +12,10 @@ class SymptomChecker:
         if user.age < 18:
             return "Unfortunately, This Symptom Checker is Specifically Designed for Adults above the age of 18. We recommend visiting a General Practitioner or A Pediatrician if its Urgent."
 
-        hyper = self._hypertension_model.symptoms(user)
-        diab = self._diabetes_model.symptoms(user)
+        hyper = self._hypertension_model.analysis(user)
+        
+        diab = 10
+        #diab = self._diabetes_model.symptoms(user)
         
         
         
