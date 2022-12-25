@@ -92,6 +92,17 @@ async def ask_optional(update: Update, text: str, kb: List[List[str]]):
     )
 
 
+def end_conversation(user_id) -> str:
+    user = users[user_id]
+    response = model.check(user)
+
+    logger.info(f"User {user_id} canceled the conversation")
+    del users[user_id]
+    logger.info(f"User {user_id} was deleted")
+
+    return response
+
+
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     """
     Entry point into the dialogue.
@@ -102,7 +113,14 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     users[user.id].name = user.first_name
     logger.info(f'User {user.id} started')
 
-    await update.message.reply_text(f'Hi {user.first_name}! This is symptom checker, what is your age?')
+    await update.message.reply_text(
+        f'Hi {user.first_name}!\n'
+        'This bot is a project of a group J-42325c which is built to check '
+        'the symptoms of users for the presence of diabetes or hypertension.\n'
+        'You will be asked to answer the questions and in the end you will get '
+        'your alleged diagnosis and a set of recommendations based on your symptoms.\n\n'
+        'Let\'s start now, first question is:\n'
+        'What is your age?')
     return AGE
 
 
@@ -422,9 +440,7 @@ async def has_dizziness(update: Update, context: ContextTypes.DEFAULT_TYPE) -> i
         await ask_optional(update, 'For how long?', DURATION_KB)
         return DIZZINESS_DURATION
     else:
-        # INFERENCE
-        response = model.check(users[user.id])
-
+        response = end_conversation(user.id)
         await update.message.reply_text(response)
         return ConversationHandler.END
 
@@ -452,9 +468,7 @@ async def dizziness_interferes(update: Update, context: ContextTypes.DEFAULT_TYP
     users[user.id].dizziness_interferes = update.message.text == 'yes'
     logger.info(f'User {user.id} selected {users[user.id].dizziness_interferes}')
 
-    # INFERENCE
-    response = model.check(users[user.id])
-
+    response = end_conversation(user.id)
     await update.message.reply_text(response)
     return ConversationHandler.END
 
@@ -490,7 +504,7 @@ if __name__ == '__main__':
             HAS_FREQUENT_URINATION: [MessageHandler(BINARY_REGEX, has_freq_urination)],
             HAS_NAUSEA: [MessageHandler(BINARY_REGEX, has_nausea)],
             HAS_FAINTNESS: [MessageHandler(BINARY_REGEX, has_faintness)],
-            HAS_THIRST_MORNING_NIGHT: [MessageHandler(BINARY_REGEX, has_poor_wound_healing)],
+            HAS_THIRST_MORNING_NIGHT: [MessageHandler(BINARY_REGEX, has_thirst_morning_night)],
             HAS_POOR_WOUND_HEALING: [MessageHandler(BINARY_REGEX, has_poor_wound_healing)],
             HAS_DIABETES: [MessageHandler(BINARY_REGEX, has_diabetes)],
             HAS_PARENTS_DIABETES: [MessageHandler(BINARY_REGEX, has_parents_diabetes)],

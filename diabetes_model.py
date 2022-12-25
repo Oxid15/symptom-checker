@@ -2,13 +2,6 @@ from user_model import UserModel
 from utils import bmi as bmi_func
 
 
-class Diabetes1:
-    def symptoms(self, user: UserModel):
-        pass
-
-# do we need different classes for different types
-
-
 class DiabetesModel:
     def symptoms(self, user: UserModel):
         bmi = bmi_func(user)
@@ -38,5 +31,52 @@ class DiabetesModel:
         ):
             return True
 
-    def recommendations(self, user) -> str:
-        return 'all good'
+    def recommendations(self, user: UserModel) -> str:
+
+        bmi = bmi_func(user)
+
+        recommend = ["You may have diabetes of type 2. This form of diabetes is characterized by high blood sugar, "
+                     "insulin resistance, and relative lack of insulin. In this situation you should definitely visit "
+                     "the doctor, as diabetes can be diagnosed only with laboratory tests."
+                     "You may be facing prediabetes now, which is characterized by elevated blood sugar levels that "
+                     "fall below the threshold to diagnose diabetes."
+                     "\nUsually, diabetes is detected by accident while examining a patient with concomitant diseases "
+                     "(obesity, coronary heart disease, arterial hypertension, gout, polycystic ovaries). "
+                     "Abdominal obesity is the main risk factor for diabetes of type 2 and is largely the cause of "
+                     "the observed insulin resistance. With insulin resistance, the body produces a lot of this hormone,"
+                     " but the tissues have a reduced sensitivity to its effects. "
+                     "\nThe most important element of diabetes therapy is changing eating habits and lifestyle. "
+                     "In some people diagnosed with prediabetes, changes in diet and sports can reduce blood glucose "
+                     "levels and prevent the development of the disease.", ]
+
+        if bmi > 25:
+            recommend.append("It is recommended to limit the caloric content of the diet to all overweight patients "
+                             "with diabetes in order to moderate weight loss. Maximum restriction of fats "
+                             "(primarily of animal origin) and sugars is necessary; "
+                             "\nmoderate restriction - products consisting mainly of complex carbohydrates (starches) and proteins; "
+                             "\nunlimited consumption – products with minimal calories (mainly vegetables rich in water and fiber)."
+                             "Remember that a small amount of weight loss may still be beneficial, and a larger "
+                             "amount will have advantageous metabolic impact in the long term.")
+
+        recommend.append("It is recommended to consume carbohydrates in vegetables, whole grains, dairy products, "
+                         "as opposed to other sources of carbohydrates containing additionally saturated fats or "
+                         "trans fats, sugars or salt. It is also important to include foods rich in mono- and "
+                         "polyunsaturated fatty acids (fish, vegetable oils) in the diet."
+                         "\nAlcohol drinking should be limited to 1 unit for women and 2 units for men per day to prevent"
+                         " hypoglycemia. One unit corresponds to 15 g of ethanol, or 125 ml of wine, or 230 ml of beer.")
+
+        if user.gender == 'female' and user.is_pregnant:
+            recommend.append('Gestational diabetes is a condition in which a woman without diabetes develops high blood '
+                            'sugar levels during pregnancy. The child and the mother who has undergone gestational '
+                            'diabetes should monitor the level of sugar to prevent type 2 diabetes. Long term, children'
+                            ' are at higher risk of being overweight and of developing type 2 diabetes.')
+
+        if user.has_high_blood_pressure:
+            recommend.append("Try to track your blood pressure for a week. For that measure your blood pressure "
+                             "at rest every morning and evening and when you feel bad. "
+                             "Do not measure the pressure immediately after eating or exercising. "
+                             "Share your observations with your doctor. ")
+
+        recommend.append("Visit your doctor as fast as you can. It may be crucial for your health.")
+
+        return '\n\n'.join(recommend)
