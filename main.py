@@ -43,12 +43,12 @@ def kb2regex(kb: List[List[str]]) -> filters.Regex:
     return filters.Regex(f'[{"|".join(terms)}]')
 
 
-BINARY_KB = [['yes', 'no']]
-GENDER_KB = [['male', 'female']]
-ACTIVITY_KB = [['mild', 'moderate', 'active']]
-INTENSITY_KB = [['mild', 'moderate', 'intense']]
-DURATION_KB = [['<1 day', '1 day to 1 week', '1 week to 1 month', '1 month to 1 year']]
-HEADACHE_LOCATION_KB = [['left', 'right', 'both', 'center']]
+BINARY_KB = [['Yes', 'No']]
+GENDER_KB = [['Male', 'Female']]
+ACTIVITY_KB = [['Occasional (<30 mins a Week)', 'Light Exercise (30 - 90 mins a Week)', 'Active (> 120 mins a Week)']]
+INTENSITY_KB = [['Mild', 'Moderate', 'Severe']]
+DURATION_KB = [['Less than 1 Day', '1 Day to 1 Week', '1 Week to 1 Month', '1 Month to 1 Year']]
+HEADACHE_LOCATION_KB = [['Left Side', 'Right Side', 'Both Sides']]
 
 INTEGER_REGEX = filters.Regex('^[0-9]')
 BINARY_REGEX = kb2regex(BINARY_KB)
@@ -117,9 +117,9 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
         f'Hi {user.first_name}!\n'
         'This bot is a project of a group J-42325c which is built to check '
         'the symptoms of users for the presence of diabetes or hypertension.\n'
-        'You will be asked to answer the questions and in the end you will get '
-        'your alleged diagnosis and a set of recommendations based on your symptoms.\n\n'
-        'Let\'s start now, first question is:\n'
+        'You will be asked to answer a series of questions and in the end you will get '
+        'your Most Likely Diagnosis along with a Set of Recommendations based on your Symptoms.\n\n'
+        'Let\'s start now, First:\n'
         'What is your age?')
     return AGE
 
@@ -129,7 +129,7 @@ async def age(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     users[user.id].age = int(update.message.text)
     logger.info(f'User {user.id} selected {users[user.id].age}')
 
-    await ask_optional(update, f'{users[user.id].name}, what is your gender?', GENDER_KB)
+    await ask_optional(update, f'{users[user.id].name}, What is your Gender?', GENDER_KB)
     return GENDER
 
 
@@ -138,11 +138,11 @@ async def gender(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     users[user.id].gender = update.message.text
     logger.info(f'User {user.id} selected {users[user.id].gender}')
 
-    if users[user.id].gender == 'male':
-        await update.message.reply_text(f'{users[user.id].name}, what is your weight in kg? Please write integer number')
+    if users[user.id].gender == 'Male':
+        await update.message.reply_text(f'{users[user.id].name}, What is your Weight in kg? Please write an Integer Number:')
         return WEIGHT
-    elif users[user.id].gender == 'female':
-        await ask_optional(update, 'Are you pregnant?', BINARY_KB)
+    elif users[user.id].gender == 'Female':
+        await ask_optional(update, 'Are you Pregnant?', BINARY_KB)
         return IS_PREGNANT
     else:
         raise ValueError(f'User selected: {users[user.id].gender}')
@@ -150,10 +150,10 @@ async def gender(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
 
 async def is_pregnant(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     user = update.message.from_user
-    users[user.id].is_pregnant = update.message.text == 'yes'
+    users[user.id].is_pregnant = update.message.text == 'Yes'
     logger.info(f'User {user.id} selected {users[user.id].is_pregnant}')
 
-    await update.message.reply_text(f'{users[user.id].name},  what is your weight in kg? Please write integer number')
+    await update.message.reply_text(f'{users[user.id].name},  What is your Weight in Kgs? Please write an Integer Number')
     return WEIGHT
 
 
@@ -162,7 +162,7 @@ async def weight(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     users[user.id].weight = int(update.message.text)
     logger.info(f'User {user.id} selected {users[user.id].weight}')
 
-    await update.message.reply_text('What is your height in cm? Please write integer number')
+    await update.message.reply_text('What is your Height in cms? Please write an Integer Number')
     return HEIGHT
 
 
@@ -171,7 +171,7 @@ async def height(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     users[user.id].height = int(update.message.text)
     logger.info(f'User {user.id} selected {users[user.id].height}')
 
-    await ask_optional(update, 'What is your physical activity level?', ACTIVITY_KB)
+    await ask_optional(update, 'How often do you engage in Physical Fitness Activities?', ACTIVITY_KB)
     return ACTIVITY_LEVEL
 
 
@@ -180,182 +180,182 @@ async def activity_level(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
     users[user.id].activity_level = update.message.text
     logger.info(f'User {user.id} selected {users[user.id].activity_level}')
 
-    await ask_optional(update, 'Do you smoke?', BINARY_KB)
+    await ask_optional(update, 'Do you Smoke?', BINARY_KB)
     return HAS_SMOKING_HABIT
 
 
 async def has_smoking_habit(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     user = update.message.from_user
-    users[user.id].has_smoking_habit = update.message.text == 'yes'
+    users[user.id].has_smoking_habit = update.message.text == 'Yes'
     logger.info(f'User {user.id} selected {users[user.id].height}')
 
-    await ask_optional(update, 'Do you drink alcohol frequently?', BINARY_KB)
+    await ask_optional(update, 'Do you Consume Alcohol on a Frequent basis?', BINARY_KB)
     return HAS_ALCOHOL_HABIT
 
 
 async def has_alcohol_habit(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     user = update.message.from_user
-    users[user.id].has_alcohol_habit = update.message.text == 'yes'
+    users[user.id].has_alcohol_habit = update.message.text == 'Yes'
     logger.info(f'User {user.id} selected {users[user.id].has_alcohol_habit}')
 
-    await ask_optional(update, 'Have you been diagnosed with arterial hypertension?', BINARY_KB)
+    await ask_optional(update, 'Have you ever been Diagnosed with Arterial Hypertension?', BINARY_KB)
     return HAS_ART_HYPERTENSION
 
 
 async def has_art_hypertension(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     user = update.message.from_user
-    users[user.id].has_art_hypertension = update.message.text == 'yes'
+    users[user.id].has_art_hypertension = update.message.text == 'Yes'
     logger.info(f'User {user.id} selected {users[user.id].has_art_hypertension}')
 
-    await ask_optional(update, 'Have your parents been diagnosed with arterial hypertension?', BINARY_KB)
+    await ask_optional(update, 'Have your Parents ever been Diagnosed with Arterial Hypertension?', BINARY_KB)
     return HAS_PARENTS_HYPERTENSION
 
 
 async def has_parents_hypertension(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     user = update.message.from_user
-    users[user.id].has_parents_hypertension = update.message.text == 'yes'
+    users[user.id].has_parents_hypertension = update.message.text == 'Yes'
     logger.info(f'User {user.id} selected {users[user.id].has_parents_hypertension}')
 
-    await ask_optional(update, 'Do you have burning sensation?', BINARY_KB)
+    await ask_optional(update, 'Do you have a Burning Sensation in any Part of your Body?', BINARY_KB)
     return HAS_BURNING_SENSATION
 
 
 async def has_burning_sensation(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     user = update.message.from_user
-    users[user.id].has_burning_sensation = update.message.text == 'yes'
+    users[user.id].has_burning_sensation = update.message.text == 'Yes'
     logger.info(f'User {user.id} selected {users[user.id].has_burning_sensation}')
 
-    await ask_optional(update, 'Did you recently lose weight?', BINARY_KB)
+    await ask_optional(update, 'Have you Recently lost a Significant amount of Weight?', BINARY_KB)
     return HAS_LOSE_WEIGHT
 
 
 async def has_lose_weight(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     user = update.message.from_user
-    users[user.id].has_lose_weight = update.message.text == 'yes'
+    users[user.id].has_lose_weight = update.message.text == 'Yes'
     logger.info(f'User {user.id} selected {users[user.id].has_lose_weight}')
 
-    await ask_optional(update, 'Did you have your appetite increase recently?', BINARY_KB)
+    await ask_optional(update, 'In the Recent days, have you experienced a Sudden Increase in your Appetite?', BINARY_KB)
     return HAS_APPETITE_INCREASE
 
 
 async def has_appetite_increase(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     user = update.message.from_user
-    users[user.id].has_appetite_increase = update.message.text == 'yes'
+    users[user.id].has_appetite_increase = update.message.text == 'Yes'
     logger.info(f'User {user.id} selected {users[user.id].has_appetite_increase}')
 
-    await ask_optional(update, 'Do you urinate frequently?', BINARY_KB)
+    await ask_optional(update, 'Do you find yourself Urinating Frequently than Normal?', BINARY_KB)
     return HAS_FREQUENT_URINATION
 
 
 async def has_freq_urination(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     user = update.message.from_user
-    users[user.id].has_freq_urination = update.message.text == 'yes'
+    users[user.id].has_freq_urination = update.message.text == 'Yes'
     logger.info(f'User {user.id} selected {users[user.id].has_freq_urination}')
 
-    await ask_optional(update, 'Do you have nausea?', BINARY_KB)
+    await ask_optional(update, 'Do you feel Nauseated often?', BINARY_KB)
     return HAS_NAUSEA
 
 
 async def has_nausea(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     user = update.message.from_user
-    users[user.id].has_nausea = update.message.text == 'yes'
+    users[user.id].has_nausea = update.message.text == 'Yes'
     logger.info(f'User {user.id} selected {users[user.id].has_nausea}')
 
-    await ask_optional(update, 'Do you feel faintness?', BINARY_KB)
+    await ask_optional(update, 'Do you get the feeling of Passing out or About to Faint?', BINARY_KB)
     return HAS_FAINTNESS
 
 
 async def has_faintness(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     user = update.message.from_user
-    users[user.id].has_faintness = update.message.text == 'yes'
+    users[user.id].has_faintness = update.message.text == 'Yes'
     logger.info(f'User {user.id} selected {users[user.id].has_faintness}')
 
-    await ask_optional(update, 'Do you feel strong thirst at the morning or during the night?', BINARY_KB)
+    await ask_optional(update, 'Do you feel the Urge to Consume Water Throuhgout the day?', BINARY_KB)
     return HAS_THIRST_MORNING_NIGHT
 
 
 async def has_thirst_morning_night(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     user = update.message.from_user
-    users[user.id].has_thirst_morning_night = update.message.text == 'yes'
+    users[user.id].has_thirst_morning_night = update.message.text == 'Yes'
     logger.info(f'User {user.id} selected {users[user.id].has_thirst_morning_night}')
 
-    await ask_optional(update, 'Do you have your wounds heal poorly?', BINARY_KB)
+    await ask_optional(update, 'Do your Wounds take Longer to Heal than before.?', BINARY_KB)
     return HAS_POOR_WOUND_HEALING
 
 
 async def has_poor_wound_healing(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     user = update.message.from_user
-    users[user.id].has_poor_wound_healing = update.message.text == 'yes'
+    users[user.id].has_poor_wound_healing = update.message.text == 'Yes'
     logger.info(f'User {user.id} selected {users[user.id].has_poor_wound_healing}')
 
-    await ask_optional(update, 'Have you been diagnosed diabetes before?', BINARY_KB)
+    await ask_optional(update, 'Have you ever been Diagnosed with Diabetes before.?', BINARY_KB)
     return HAS_DIABETES
 
 
 async def has_diabetes(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     user = update.message.from_user
-    users[user.id].has_diabetes = update.message.text == 'yes'
+    users[user.id].has_diabetes = update.message.text == 'Yes'
     logger.info(f'User {user.id} selected {users[user.id].has_diabetes}')
 
-    await ask_optional(update, 'Have your parents been diagnosed with diabetes?', BINARY_KB)
+    await ask_optional(update, 'Have your Parents ever been Diagnosed with Diabetes.?', BINARY_KB)
     return HAS_PARENTS_DIABETES
 
 
 async def has_parents_diabetes(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     user = update.message.from_user
-    users[user.id].has_parents_diabetes = update.message.text == 'yes'
+    users[user.id].has_parents_diabetes = update.message.text == 'Yes'
     logger.info(f'User {user.id} selected {users[user.id].has_parents_diabetes}')
 
-    await ask_optional(update, 'Do you have high blood pressure?', BINARY_KB)
+    await ask_optional(update, 'Do you have high blood pressure than normal for your age.?', BINARY_KB)
     return HAS_HIGH_BLOOD_PRESSURE
 
 
 async def has_high_blood_pressure(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     user = update.message.from_user
-    users[user.id].has_high_blood_pressure = update.message.text == 'yes'
+    users[user.id].has_high_blood_pressure = update.message.text == 'Yes'
     logger.info(f'User {user.id} selected {users[user.id].has_high_blood_pressure}')
 
-    await ask_optional(update, 'Do you have furunculosis?', BINARY_KB)
+    await ask_optional(update, 'Do you have Furunculosis?', BINARY_KB)
     return HAS_FURUNCULOSIS
 
 
 async def has_furunculosis(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     user = update.message.from_user
-    users[user.id].has_furunculosis = update.message.text == 'yes'
+    users[user.id].has_furunculosis = update.message.text == 'Yes'
     logger.info(f'User {user.id} selected {users[user.id].has_furunculosis}')
 
-    await ask_optional(update, 'Do you have candiasis?', BINARY_KB)
+    await ask_optional(update, 'Do you have Candiasis?', BINARY_KB)
     return HAS_CANDIASIS
 
 
 async def has_candidiasis(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     user = update.message.from_user
-    users[user.id].has_candidiasis = update.message.text == 'yes'
+    users[user.id].has_candidiasis = update.message.text == 'Yes'
     logger.info(f'User {user.id} selected {users[user.id].has_candidiasis}')
 
-    await ask_optional(update, 'Did you have excessive physical activity recently?', BINARY_KB)
+    await ask_optional(update, 'In recent times, Did you engage in Excessive Physical Activity.?', BINARY_KB)
     return HAS_EXC_PHYSICAL_ACTIVITY
 
 
 async def has_exc_physical_activity(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     user = update.message.from_user
-    users[user.id].has_exc_physical_activity = update.message.text == 'yes'
+    users[user.id].has_exc_physical_activity = update.message.text == 'Yes'
     logger.info(f'User {user.id} selected {users[user.id].has_exc_physical_activity}')
 
-    await ask_optional(update, 'Do you have impaired vision?', BINARY_KB)
+    await ask_optional(update, 'Do you feel that your Vision is Impaired or was impaired & returned to Normal.?', BINARY_KB)
     return HAS_IMPAIRED_VISION
 
 
 async def has_impaired_vision(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     user = update.message.from_user
-    users[user.id].has_impaired_vision = update.message.text == 'yes'
+    users[user.id].has_impaired_vision = update.message.text == 'Yes'
     logger.info(f'User {user.id} selected {users[user.id].has_impaired_vision}')
 
     if users[user.id].has_impaired_vision:
-        await ask_optional(update, 'How long do you have it?', DURATION_KB)
+        await ask_optional(update, 'When did you start experiencing this.?', DURATION_KB)
         return IMPAIRED_VISION_DURATION
     else:
-        await ask_optional(update, 'Do you have pain in the leg?', BINARY_KB)
+        await ask_optional(update, 'Have you been experiencing Pain in your Legs.?', BINARY_KB)
         return HAS_PAIN_IN_LEG
 
 
@@ -364,20 +364,20 @@ async def impaired_vision_duration(update: Update, context: ContextTypes.DEFAULT
     users[user.id].impaired_vision_duration = update.message.text
     logger.info(f'User {user.id} selected {users[user.id].impaired_vision_duration}')
 
-    await ask_optional(update, 'Do you have pain in the leg?', BINARY_KB)
+    await ask_optional(update, 'Have you been experiencing Pain in your Legs.?', BINARY_KB)
     return HAS_PAIN_IN_LEG
 
 
 async def has_pain_in_leg(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     user = update.message.from_user
-    users[user.id].has_pain_in_leg = update.message.text == 'yes'
+    users[user.id].has_pain_in_leg = update.message.text == 'Yes'
     logger.info(f'User {user.id} selected {users[user.id].has_pain_in_leg}')
 
     if users[user.id].has_pain_in_leg:
-        await ask_optional(update, 'How intense is the pain?', INTENSITY_KB)
+        await ask_optional(update, 'Can you describe the Intensity of the Pain:', INTENSITY_KB)
         return PAIN_IN_LEG_INTENSITY
     else:
-        await ask_optional(update, 'Do you have a headache?', BINARY_KB)
+        await ask_optional(update, 'Do you have a Headache.?', BINARY_KB)
         return HAS_HEADACHE
 
 
@@ -386,39 +386,39 @@ async def pain_in_leg_intensity(update: Update, context: ContextTypes.DEFAULT_TY
     users[user.id].pain_in_leg_intensity = update.message.text
     logger.info(f'User {user.id} selected {users[user.id].pain_in_leg_intensity}')
 
-    await ask_optional(update, 'Do you have a headache?', BINARY_KB)
+    await ask_optional(update, 'Do you have a Headache?', BINARY_KB)
     return HAS_HEADACHE
 
 
 async def has_headache(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     user = update.message.from_user
-    users[user.id].has_headache = update.message.text == 'yes'
+    users[user.id].has_headache = update.message.text == 'Yes'
     logger.info(f'User {user.id} selected {users[user.id].has_headache}')
 
     if users[user.id].has_headache:
-        await ask_optional(update, 'Where?', HEADACHE_LOCATION_KB)
+        await ask_optional(update, 'Can you describe which Part of the Head you Experience the Pain in:', HEADACHE_LOCATION_KB)
         return HEADACHE_LOCATION
     else:
-        await ask_optional(update, 'Do you feel dizzy?', BINARY_KB)
+        await ask_optional(update, 'Do you get the feeling of Dizziness or Lightheadedness.?', BINARY_KB)
         return HAS_DIZZINESS
 
 
 async def headache_location(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     user = update.message.from_user
-    users[user.id].headache_location = update.message.text == 'yes'
+    users[user.id].headache_location = update.message.text == 'Yes'
     logger.info(f'User {user.id} selected {users[user.id].headache_location}')
 
-    await ask_optional(update, 'For how long?', DURATION_KB)
+    await ask_optional(update, 'How long have you been Experiencing this for.?', DURATION_KB)
     return HEADACHE_DURATION
 
 
 async def headache_duration(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     user = update.message.from_user
-    users[user.id].headache_duration = update.message.text == 'yes'
+    users[user.id].headache_duration = update.message.text == 'Yes'
 
     logger.info(f'User {user.id} selected {users[user.id].headache_duration}')
 
-    await ask_optional(update,'How intense is the pain?', INTENSITY_KB)
+    await ask_optional(update,'Can you Describe the Intensity of the Pain:', INTENSITY_KB)
     return HEADACHE_INTENSITY
 
 
@@ -427,17 +427,17 @@ async def headache_intensity(update: Update, context: ContextTypes.DEFAULT_TYPE)
     users[user.id].headache_intensity = update.message.text
     logger.info(f'User {user.id} selected {users[user.id].headache_intensity}')
 
-    await ask_optional(update, 'Do you feel dizzy?', BINARY_KB)
+    await ask_optional(update, 'Do you get the feeling of Dizziness or Lightheadedness.?', BINARY_KB)
     return HAS_DIZZINESS
 
 
 async def has_dizziness(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     user = update.message.from_user
-    users[user.id].has_dizziness = update.message.text == 'yes'
+    users[user.id].has_dizziness = update.message.text == 'Yes'
     logger.info(f'User {user.id} selected {users[user.id].has_dizziness}')
 
     if users[user.id].has_dizziness:
-        await ask_optional(update, 'For how long?', DURATION_KB)
+        await ask_optional(update, 'How long have you been Experiencing this for.?', DURATION_KB)
         return DIZZINESS_DURATION
     else:
         response = end_conversation(user.id)
@@ -447,25 +447,25 @@ async def has_dizziness(update: Update, context: ContextTypes.DEFAULT_TYPE) -> i
 
 async def dizziness_duration(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     user = update.message.from_user
-    users[user.id].dizziness_duration = update.message.text == 'yes'
+    users[user.id].dizziness_duration = update.message.text == 'Yes'
     logger.info(f'User {user.id} selected {users[user.id].dizziness_duration}')
 
-    await ask_optional(update, 'How intense?', INTENSITY_KB)
+    await ask_optional(update, 'Can you Describe the Intensity of the Pain:', INTENSITY_KB)
     return DIZZINESS_INTENSITY
 
 
 async def dizziness_intensity(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     user = update.message.from_user
-    users[user.id].dizziness_intensity = update.message.text == 'yes'
+    users[user.id].dizziness_intensity = update.message.text == 'Yes'
     logger.info(f'User {user.id} selected {users[user.id].dizziness_intensity}')
 
-    await ask_optional(update, 'Dizziness inteferes in your daily activities?', BINARY_KB)
+    await ask_optional(update, 'Does Dizziness intefere with your Day-to-Day activities?', BINARY_KB)
     return DIZZINESS_INTERFERES
 
 
 async def dizziness_interferes(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     user = update.message.from_user
-    users[user.id].dizziness_interferes = update.message.text == 'yes'
+    users[user.id].dizziness_interferes = update.message.text == 'Yes'
     logger.info(f'User {user.id} selected {users[user.id].dizziness_interferes}')
 
     response = end_conversation(user.id)
