@@ -10,7 +10,7 @@ class SymptomChecker:
 
     def check(self, user: UserModel) -> str:
         if user.age < 18:
-            return "This checker doesn't work with children"
+            return "Unfortunately, This Symptom Checker is Specifically Designed for Adults above the age of 18. We recommend visiting a General Practitioner or A Pediatrician if its Urgent."
 
         hyper = self._hypertension_model.symptoms(user)
         diab = self._diabetes_model.symptoms(user)
