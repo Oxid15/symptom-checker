@@ -181,11 +181,11 @@ class HypertensionModel:
         # 19
 
         if user.has_pain_in_leg:
-            if user.pain_in_leg_intensiy == 'Mild':
+            if user.pain_in_leg_intensity == 'Mild':
                 FINAL.append(1)
-            elif user.pain_in_leg_intensiy == 'Moderate':
+            elif user.pain_in_leg_intensity == 'Moderate':
                 FINAL.append(2)
-            elif user.pain_in_leg_intensiy == 'Severe':
+            elif user.pain_in_leg_intensity == 'Severe':
                 FINAL.append(3)
             else:
                 FINAL.append(0)
