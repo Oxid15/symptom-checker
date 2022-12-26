@@ -1,4 +1,4 @@
-from typing import Literal, Union
+from typing import Literal
 
 
 Duration = Literal['Less than 1 Day', '1 Day to 1 Week', '1 Week to 1 Month', '1 Month to 1 Year', None]
@@ -7,7 +7,6 @@ Intensity = Literal['Mild', 'Moderate', 'Severe', None]
 
 class UserModel:
     def __init__(self):
-        
         self.name: str
 
         self.age: int
@@ -23,20 +22,19 @@ class UserModel:
 
         self.has_art_hypertension: bool
         self.has_diabetes: bool
-        
+
         self.has_parents_hypertension: bool
         self.has_parents_diabetes: bool
-        
+
         self.has_lose_weight: bool
         self.has_appetite_increase: bool
         self.has_thirst_morning_night: bool
         self.has_nausea: bool
-        self.has_freq_urination: bool    
+        self.has_freq_urination: bool
         self.has_burning_sensation: bool
         self.has_faintness: bool
         self.has_poor_wound_healing: bool
 
-                
         self.has_high_blood_pressure: bool
         self.has_furunculosis: bool
         self.has_candidiasis: bool
@@ -55,10 +53,10 @@ class UserModel:
 
         self.has_dizziness: bool
         self.dizziness_duration: Duration
-        self.dizziness_intensity: Intensity 
+        self.dizziness_intensity: Intensity
         self.dizziness_interferes: bool
 
         # can add Weakness, Sleeplessness, Weight gain
-           
+
     def __str__(self) -> str:
         return str(self.__dict__)
