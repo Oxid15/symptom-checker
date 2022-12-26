@@ -29,6 +29,8 @@ class HypertensionModel:
         # When Pregnant, the Blood pressure of Women is lower. hence the risk to HP is variable
         if user.gender == 'Female' and user.is_pregnant:
             FINAL.append(1)
+        else:
+            FINAL.append(0)
 
         # 3 & 4
         # Weight & Height
@@ -76,21 +78,21 @@ class HypertensionModel:
 
         act = user.activity_level
 
-        if act == 'Occasional (<30 mins a week)':
+        if act == 'Occasional (<30 mins a Week)':
             FINAL.append(2)
-
-        if act == 'Light Exercise (30 - 90 mins a Week)':
+        elif act == 'Light Exercise (30 - 90 mins a Week)':
             FINAL.append(1)
-
-        if act == 'Active (> 120 mins a Week)':
+        elif act == 'Active (> 120 mins a Week)':
             FINAL.append(0)
+        else:
+            raise RuntimeError(f'got {act}')
 
         # 7 & 8
         # Smoking & Alcohol
 
         if user.has_smoking_habit and user.has_alcohol_habit:
             FINAL.append(2)
-        elif user.has_smoking_habit or user.has_alcohol_habit: 
+        elif user.has_smoking_habit or user.has_alcohol_habit:
             FINAL.append(1)
         else:
             FINAL.append(0)
@@ -185,6 +187,8 @@ class HypertensionModel:
                 FINAL.append(2)
             elif user.pain_in_leg_intensiy == 'Severe':
                 FINAL.append(3)
+            else:
+                FINAL.append(0)
         else:
             FINAL.append(0)
 
