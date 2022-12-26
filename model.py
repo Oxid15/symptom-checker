@@ -17,13 +17,13 @@ class SymptomChecker:
                 f'\nPlease note this is a Diagnosis and not an Actual Pracitioners report, hence '
                 f'If you feel the need, please consult a General Practitioner or Seek Emergency '
                 f'help As soon as possible.\nHere are a few recommendations on How to deal '
-                f'with {disease}\n')
+                f'with {disease}\n\n')
 
     def check(self, user: UserModel) -> str:
         if user.age < 18:
             return (
-                'Unfortunately, This Symptom Checker is Specifically Designed for Adults above'
-                ' the age of 18. We recommend visiting a General Practitioner or A Pediatrician'
+                'Unfortunately, This Symptom Checker is Specifically Designed for Adults above '
+                'the age of 18. We recommend visiting a General Practitioner or A Pediatrician '
                 'if its Urgent.')
 
         hyper = self._hypertension_model.analysis(user)
