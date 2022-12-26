@@ -229,7 +229,7 @@ class HypertensionModel:
                          "\nLimit consumption of coffee and other caffeine-rich products, "
                          "as caffeine increases blood pressure .")
 
-        if user.activity_level != 'active':
+        if user.activity_level != 'Active (> 120 mins a Week)':
             recommend.append("Add aerobic physical activity for 30-40 minutes at least 4 times a week."
                              "Regular exercise can reduce blood pressure.")
 
@@ -237,7 +237,7 @@ class HypertensionModel:
             recommend.append("Smoking has a negative impact on your condition; "
                              "however, quitting will help you feel better.")
 
-        if bmi > 25:
+        if bmi >= 25:
             recommend.append("Maintain a healthy body mass index (BMI < 25 kg/m2)."
                              "Remember that a small amount of weight loss may still be beneficial, and a larger "
                              "amount will have advantageous metabolic impact in the long term.")
@@ -254,7 +254,7 @@ class HypertensionModel:
                              "of table salt. Reducing body weight for patients with hypertension and diabetes helps to "
                              "reduce blood pressure and increase tissue sensitivity to insulin.")
 
-        if user.age < 55 and user.gender == 'female':
+        if user.age < 55 and user.gender == 'Female':
             recommend.append("Young women who take oral contraceptives should also monitor their "
                              "blood pressure even when they feel well.")
 

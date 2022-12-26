@@ -396,7 +396,7 @@ class DiabetesModel:
                      "In some people diagnosed with prediabetes, changes in diet and sports can reduce blood glucose "
                      "levels and prevent the development of the disease.", ]
 
-        if bmi > 25:
+        if bmi >= 25:
             recommend.append("It is recommended to limit the caloric content of the diet to all overweight patients "
                              "with diabetes in order to moderate weight loss. Maximum restriction of fats "
                              "(primarily of animal origin) and sugars is necessary; "
@@ -412,7 +412,7 @@ class DiabetesModel:
                          "\nAlcohol drinking should be limited to 1 unit for women and 2 units for men per day to prevent"
                          " hypoglycemia. One unit corresponds to 15 g of ethanol, or 125 ml of wine, or 230 ml of beer.")
 
-        if user.gender == 'female' and user.is_pregnant:
+        if user.gender == 'Female' and user.is_pregnant:
             recommend.append('Gestational diabetes is a condition in which a woman without diabetes develops high blood '
                             'sugar levels during pregnancy. The child and the mother who has undergone gestational '
                             'diabetes should monitor the level of sugar to prevent type 2 diabetes. Long term, children'
