@@ -1,35 +1,378 @@
 from user_model import UserModel
 from utils import bmi as bmi_func
+from scipy.spatial import distance
 
 
 class DiabetesModel:
-    def symptoms(self, user: UserModel):
+    def symptoms_type1(self, user: UserModel):
+        #  Array to hold state
+        FINAL = []
+
+        # [ 1, 2, 3 & 4, 5, 6, 7 & 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
+
+        # The Ideal Scenario for Diabetes
+        DIA_VECTOR = [1, 0, 2, 1, 2, 2, 2, 2, 0, 1, 1, 1, 1, 1, 1, 3, 3]  # Symptom Vector
+
+        # 1
+        # Age Based
+        if user.age >= 18 and user.age <= 45:
+            FINAL.append(1)
+        else:
+            FINAL.append(0)
+
+        # 2
+        # Gender, regardless of Men or Women, both are prone to HP & Diabetes
+        if user.is_pregnant:
+            FINAL.append(1)
+
+        # 3 & 4
+        # Weight & Height
+
+        w = user.weight
+        h = user.height
+
+        # underweight = 1
+        # overweight = 2
+        # normal = 0
+
+        # Underweight Conditions
+        if (h < 160 and w < 45 or
+            h > 161 and h < 170 and w > 46 and w < 52 or
+            h > 171 and h < 180 and w > 53 and w < 60 or
+            h > 181 and h < 190 and w > 61 and w < 65 or
+            h > 191 and w > 72):
+            FINAL.append(1)
+
+        # Overweight Conditions
+        elif (h < 160 and w < 70 or
+              h > 161 and h < 170 and w > 71 and w < 81 or
+              h > 171 and h < 180 and w > 82 and w < 95 or
+              h > 181 and h < 190 and w > 96 and w < 110 or
+              h > 191 and w > 111):
+            FINAL.append(2)
+        else:
+            FINAL.append(0)
+
+        # 5
+        # BMI
+
+        # low = 0
+        # high = 1
+
         bmi = bmi_func(user)
-        if (
-            user.age >= 45 or
-            bmi > 25 or
-            user.has_parents_diabetes or
-            user.has_art_hypertension or
-            user.has_smoking_habit or
-            user.has_alcohol_habit or
-            user.has_appetite_increase or
-            user.has_burning_sensation or
-            user.has_lose_weight or
-            user.has_freq_urination or
-            user.has_nausea or
-            user.has_faintness or
-            user.has_thirst_morning_night or
-            user.has_poor_wound_healing or
-            user.has_high_blood_pressure or
-            user.has_furunculosis or
-            user.has_candidiasis or
-            user.has_exc_physical_activity or
-            user.has_impaired_vision or
-            user.has_pain_in_leg or
-            user.has_headache or
-            user.has_dizziness
-        ):
-            return True
+
+        if bmi >= 25.1:
+            FINAL.append(1)
+        else:
+            FINAL.append(0)
+
+        # 6
+        # Activity Level
+
+        act = user.activity_level
+
+        if act == 'Occasional (<30 mins a week)':
+            FINAL.append(2)
+
+        if act == 'Light Exercise (30 - 90 mins a Week)':
+            FINAL.append(1)
+
+        if act == 'Active (> 120 mins a Week)':
+            FINAL.append(0)
+
+        # 7 & 8
+        # Smoking & Alcohol
+
+        if user.has_smoking_habit and user.has_alcohol_habit:
+            FINAL.append(2)
+        elif user.has_smoking_habit or user.has_alcohol_habit: 
+            FINAL.append(1)
+        else:
+            FINAL.append(0)
+
+        # 9 Diabetes & Hypertension
+
+        if user.has_art_hypertension:
+            FINAL.append(1)
+        elif user.has_diabetes:
+            FINAL.append(2)
+        else:
+            FINAL.append(0)
+
+        # 10 Diabetes & Hypertension of parents
+
+        if user.has_parents_hypertension:
+            FINAL.append(1)
+        elif user.has_parents_diabetes:
+            FINAL.append(2)
+        else:
+            FINAL.append(0)
+
+        # 11
+
+        if user.has_burning_sensation:
+            FINAL.append(0)
+        else:
+            FINAL.append(0)
+
+        # 12
+
+        if user.has_lose_weight:
+            FINAL.append(1)
+        else:
+            FINAL.append(0)
+
+        # 13
+
+        if user.has_thirst_morning_night:
+            FINAL.append(1)
+        else:
+            FINAL.append(0)
+
+        # 14
+
+        if user.has_freq_urination:
+            FINAL.append(1)
+        else:
+            FINAL.append(0)
+
+        # 15
+
+        if user.has_nausea:
+            FINAL.append(0)
+        else:
+            FINAL.append(0)
+
+        # 16
+
+        if user.has_faintness:
+            FINAL.append(1)
+        else:
+            FINAL.append(0)
+
+        # 17
+
+        if user.has_poor_wound_healing:
+            FINAL.append(1)
+        else:
+            FINAL.append(0)
+
+        # 18
+
+        if user.has_impaired_vision:
+            if user.impaired_vision_duration == 'Less than 1 Day':
+                FINAL.append(2)
+            elif user.impaired_vision_duration == '1 Day to 1 Week':
+                FINAL.append(3)
+            elif user.impaired_vision_duration == '1 Week to 1 Month' :
+                FINAL.append(1)
+            else:
+                FINAL.append(0)
+        else:
+            FINAL.append(0)
+
+        # 19
+
+        if user.has_pain_in_leg:
+            if user.pain_in_leg_intensiy == 'Mild':
+                FINAL.append(1)
+            elif user.pain_in_leg_intensiy == 'Moderate':
+                FINAL.append(2)
+            elif user.pain_in_leg_intensiy == 'Severe':
+                FINAL.append(3)
+        else:
+            FINAL.append(0)
+
+        #Calculating the Spatial Difference between the User Vector & Symptom Vector
+        SS = distance.hamming(HYPER_VECTOR,FINAL)
+        ANS = 1.0-SS
+
+        return ANS
+    
+    def symptoms_type2(self, user: UserModel):
+        #  Array to hold state
+        FINAL = []
+
+        # [ 1, 2, 3 & 4, 5, 6, 7 & 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
+
+        # The Ideal Scenario for Diabetes
+        DIA_VECTOR = [1, 0, 2, 1, 2, 2, 2, 2, 0, 0, 0, 1, 0, 1, 1, 3, 3]  # Symptom Vector
+
+        # 1
+        # Age Based
+        if user.age >= 45:
+            FINAL.append(1)
+        else:
+            FINAL.append(0)
+
+        # 2
+        # Gender, regardless of Men or Women, both are prone to HP & Diabetes
+        if user.is_pregnant:
+            FINAL.append(1)
+
+        # 3 & 4
+        # Weight & Height
+
+        w = user.weight
+        h = user.height
+
+        # underweight = 1
+        # overweight = 2
+        # normal = 0
+
+        # Underweight Conditions
+        if (h < 160 and w < 45 or
+            h > 161 and h < 170 and w > 46 and w < 52 or
+            h > 171 and h < 180 and w > 53 and w < 60 or
+            h > 181 and h < 190 and w > 61 and w < 65 or
+            h > 191 and w > 72):
+            FINAL.append(1)
+
+        # Overweight Conditions
+        elif (h < 160 and w < 70 or
+              h > 161 and h < 170 and w > 71 and w < 81 or
+              h > 171 and h < 180 and w > 82 and w < 95 or
+              h > 181 and h < 190 and w > 96 and w < 110 or
+              h > 191 and w > 111):
+            FINAL.append(2)
+        else:
+            FINAL.append(0)
+
+        # 5
+        # BMI
+
+        # low = 0
+        # high = 1
+
+        bmi = bmi_func(user)
+
+        if bmi >= 25.1:
+            FINAL.append(1)
+        else:
+            FINAL.append(0)
+
+        # 6
+        # Activity Level
+
+        act = user.activity_level
+
+        if act == 'Occasional (<30 mins a week)':
+            FINAL.append(2)
+
+        if act == 'Light Exercise (30 - 90 mins a Week)':
+            FINAL.append(1)
+
+        if act == 'Active (> 120 mins a Week)':
+            FINAL.append(0)
+
+        # 7 & 8
+        # Smoking & Alcohol
+
+        if user.has_smoking_habit and user.has_alcohol_habit:
+            FINAL.append(2)
+        elif user.has_smoking_habit or user.has_alcohol_habit: 
+            FINAL.append(1)
+        else:
+            FINAL.append(0)
+
+        # 9 Diabetes & Hypertension
+
+        if user.has_art_hypertension:
+            FINAL.append(1)
+        elif user.has_diabetes:
+            FINAL.append(2)
+        else:
+            FINAL.append(0)
+
+        # 10 Diabetes & Hypertension of parents
+
+        if user.has_parents_hypertension:
+            FINAL.append(1)
+        elif user.has_parents_diabetes:
+            FINAL.append(2)
+        else:
+            FINAL.append(0)
+
+        # 11
+
+        if user.has_burning_sensation:
+            FINAL.append(0)
+        else:
+            FINAL.append(0)
+
+        # 12
+
+        if user.has_lose_weight:
+            FINAL.append(1)
+        else:
+            FINAL.append(0)
+
+        # 13
+
+        if user.has_thirst_morning_night:
+            FINAL.append(1)
+        else:
+            FINAL.append(0)
+
+        # 14
+
+        if user.has_freq_urination:
+            FINAL.append(1)
+        else:
+            FINAL.append(0)
+
+        # 15
+
+        if user.has_nausea:
+            FINAL.append(0)
+        else:
+            FINAL.append(0)
+
+        # 16
+
+        if user.has_faintness:
+            FINAL.append(1)
+        else:
+            FINAL.append(0)
+
+        # 17
+
+        if user.has_poor_wound_healing:
+            FINAL.append(1)
+        else:
+            FINAL.append(0)
+
+        # 18
+
+        if user.has_impaired_vision:
+            if user.impaired_vision_duration == 'Less than 1 Day':
+                FINAL.append(2)
+            elif user.impaired_vision_duration == '1 Day to 1 Week':
+                FINAL.append(3)
+            elif user.impaired_vision_duration == '1 Week to 1 Month' :
+                FINAL.append(1)
+            else:
+                FINAL.append(0)
+        else:
+            FINAL.append(0)
+
+        # 19
+
+        if user.has_pain_in_leg:
+            if user.pain_in_leg_intensiy == 'Mild':
+                FINAL.append(1)
+            elif user.pain_in_leg_intensiy == 'Moderate':
+                FINAL.append(2)
+            elif user.pain_in_leg_intensiy == 'Severe':
+                FINAL.append(3)
+        else:
+            FINAL.append(0)
+
+        #Calculating the Spatial Difference between the User Vector & Symptom Vector
+        SS = distance.hamming(HYPER_VECTOR,FINAL)
+        ANS = 1.0-SS
+
+        return ANS
 
     def recommendations(self, user: UserModel) -> str:
 
