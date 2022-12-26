@@ -11,7 +11,7 @@ class DiabetesModel:
         # [ 1, 2, 3 & 4, 5, 6, 7 & 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
 
         # The Ideal Scenario for Diabetes
-        DIA_VECTOR = [1, 0, 2, 1, 2, 2, 2, 2, 0, 1, 1, 1, 1, 1, 1, 3, 3]  # Symptom Vector
+        DIA_VECTOR = [1, 0, 1, 1, 2, 2, 1, 1, 0, 1, 1, 1, 1, 1, 1, 3, 3]  # Symptom Vector
 
         # 1
         # Age Based
@@ -33,8 +33,8 @@ class DiabetesModel:
         w = user.weight
         h = user.height
 
-        # underweight = 1
-        # overweight = 2
+        # underweight = 2
+        # overweight = 1
         # normal = 0
 
         # Underweight Conditions
@@ -43,7 +43,7 @@ class DiabetesModel:
             h > 171 and h < 180 and w > 53 and w < 60 or
             h > 181 and h < 190 and w > 61 and w < 65 or
             h > 191 and w > 72):
-            FINAL.append(1)
+            FINAL.append(2)
 
         # Overweight Conditions
         elif (h < 160 and w < 70 or
@@ -51,7 +51,7 @@ class DiabetesModel:
               h > 171 and h < 180 and w > 82 and w < 95 or
               h > 181 and h < 190 and w > 96 and w < 110 or
               h > 191 and w > 111):
-            FINAL.append(2)
+            FINAL.append(1)
         else:
             FINAL.append(0)
 
@@ -95,18 +95,18 @@ class DiabetesModel:
         # 9 Diabetes & Hypertension
 
         if user.has_art_hypertension:
-            FINAL.append(1)
-        elif user.has_diabetes:
             FINAL.append(2)
+        elif user.has_diabetes:
+            FINAL.append(1)
         else:
             FINAL.append(0)
 
         # 10 Diabetes & Hypertension of parents
 
         if user.has_parents_hypertension:
-            FINAL.append(1)
-        elif user.has_parents_diabetes:
             FINAL.append(2)
+        elif user.has_parents_diabetes:
+            FINAL.append(1)
         else:
             FINAL.append(0)
 
@@ -198,7 +198,7 @@ class DiabetesModel:
         # [ 1, 2, 3 & 4, 5, 6, 7 & 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
 
         # The Ideal Scenario for Diabetes
-        DIA_VECTOR = [1, 0, 2, 1, 2, 2, 2, 2, 0, 0, 0, 1, 0, 1, 1, 3, 3]  # Symptom Vector
+        DIA_VECTOR = [1, 0, 1, 1, 2, 2, 1, 1, 0, 0, 0, 1, 0, 1, 1, 3, 3]  # Symptom Vector
 
         # 1
         # Age Based
@@ -220,8 +220,8 @@ class DiabetesModel:
         w = user.weight
         h = user.height
 
-        # underweight = 1
-        # overweight = 2
+        # underweight = 2
+        # overweight = 1
         # normal = 0
 
         # Underweight Conditions
@@ -230,7 +230,7 @@ class DiabetesModel:
             h > 171 and h < 180 and w > 53 and w < 60 or
             h > 181 and h < 190 and w > 61 and w < 65 or
             h > 191 and w > 72):
-            FINAL.append(1)
+            FINAL.append(2)
 
         # Overweight Conditions
         elif (h < 160 and w < 70 or
@@ -238,7 +238,7 @@ class DiabetesModel:
               h > 171 and h < 180 and w > 82 and w < 95 or
               h > 181 and h < 190 and w > 96 and w < 110 or
               h > 191 and w > 111):
-            FINAL.append(2)
+            FINAL.append(1)
         else:
             FINAL.append(0)
 
@@ -282,18 +282,18 @@ class DiabetesModel:
         # 9 Diabetes & Hypertension
 
         if user.has_art_hypertension:
-            FINAL.append(1)
-        elif user.has_diabetes:
             FINAL.append(2)
+        elif user.has_diabetes:
+            FINAL.append(1)
         else:
             FINAL.append(0)
 
         # 10 Diabetes & Hypertension of parents
 
         if user.has_parents_hypertension:
-            FINAL.append(1)
-        elif user.has_parents_diabetes:
             FINAL.append(2)
+        elif user.has_parents_diabetes:
+            FINAL.append(1)
         else:
             FINAL.append(0)
 
