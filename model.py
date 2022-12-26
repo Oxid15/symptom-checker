@@ -10,13 +10,14 @@ class SymptomChecker:
 
     def _report(self, disease: str, score: float) -> str:
         return (
-                f'Based on your Symptoms, Our Diagnosis suggests that you might be sufferring'
-                f'from {disease} as you have a, {score * 100}% match to the criterias required'
+                f'Based on your Symptoms, Our Diagnosis suggests that you might be sufferring '
+                f'from {disease} as you have a, {score * 100: 0.2f}% match to the '
+                f'criterias required '
                 f'to have {disease}'
-                f'\nPlease note this is a Diagnosis and not an Actual Pracitioners report, hence'
-                f'If you feel the need, please consult a General Practitioner or Seek Emergency'
-                f'help As soon as possible.\n Here are a few recommendations on How to deal'
-                'with {disease}\n')
+                f'\nPlease note this is a Diagnosis and not an Actual Pracitioners report, hence '
+                f'If you feel the need, please consult a General Practitioner or Seek Emergency '
+                f'help As soon as possible.\nHere are a few recommendations on How to deal '
+                f'with {disease}\n')
 
     def check(self, user: UserModel) -> str:
         if user.age < 18:
