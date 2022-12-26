@@ -4,6 +4,9 @@ from diabetes_model import DiabetesModel
 from hypertension_model import HypertensionModel
 
 
+THRESHOLD = 0.6
+
+
 class SymptomChecker:
     def __init__(self):
         self._hypertension_model = HypertensionModel()
@@ -12,7 +15,7 @@ class SymptomChecker:
     def _report(self, disease: str, score: float) -> str:
         return (
                 f'Based on your Symptoms, Our Diagnosis suggests that you might be sufferring '
-                f'from {disease} as you have a, {score * 100: 0.2f}% match to the '
+                f'from {disease} as you have a {score * 100: 0.2f}% match to the '
                 f'criterias required '
                 f'to have {disease}'
                 f'\nPlease note this is a Diagnosis and not an Actual Pracitioners report, hence '
