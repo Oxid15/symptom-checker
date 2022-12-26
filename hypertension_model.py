@@ -27,7 +27,7 @@ class HypertensionModel:
         # 2
         # Gender, regardless of Men or Women, both are prone to HP & Diabetes
         # When Pregnant, the Blood pressure of Women is lower. hence the risk to HP is variable
-        if user.is_pregnant:
+        if user.gender == 'Female' and user.is_pregnant:
             FINAL.append(1)
 
         # 3 & 4
@@ -188,12 +188,11 @@ class HypertensionModel:
         else:
             FINAL.append(0)
 
-        #Calculating the Spatial Difference between the User Vector & Symptom Vector
-        SS = distance.hamming(HYPER_VECTOR,FINAL)
-        ANS = 1.0-SS
+        # Calculating the Spatial Difference between the User Vector & Symptom Vector
+        SS = distance.hamming(HYPER_VECTOR, FINAL)
+        ANS = 1.0 - SS
 
         return ANS
-
 
     def recommendations(self, user: UserModel) -> str:
         bmi = bmi_func(user)
@@ -212,7 +211,7 @@ class HypertensionModel:
                              "cognitive impairment and dementia in old age. Intensive therapy of hypertension "
                              "reduces the risks of cognitive impairment and dementia.")
 
-        if user.gender == 'female' and user.is_pregnant:
+        if user.gender == 'Female' and user.is_pregnant:
             recommend.append("Hypertension and its associated complications still remain one of the main causes "
                              "of morbidity and mortality of the mother, fetus and newborn."
                              "Consult your doctor as soon as possible, as it may be vital for your "
@@ -241,7 +240,7 @@ class HypertensionModel:
 
         if user.has_alcohol_habit:
             recommend.append("Limit alcohol consumption. This can reduce blood pressure and has broader health benefits.")
-            if user.gender == 'male':
+            if user.gender == 'Male':
                 recommend.append("14 units per week is okay (1 unit is about 125 ml of wine or 230 ml of beer)")
             else:
                 recommend.append("7 units per week is okay (1 unit is about 125 ml of wine or 230 ml of beer)")
