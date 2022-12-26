@@ -4,7 +4,7 @@ from diabetes_model import DiabetesModel
 from hypertension_model import HypertensionModel
 
 
-THRESHOLD = 0.8
+THRESHOLD = 0.65
 
 
 class SymptomChecker:
