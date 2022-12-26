@@ -25,15 +25,14 @@ class SymptomChecker:
         hyper = self._hypertension_model.analysis(user)
 
         diab = 0
-        #diab = self._diabetes_model.symptoms(user)
-
+        # diab = self._diabetes_model.symptoms(user)
 
         if hyper > diab:
-            return "Based on your Symptoms, Our Diagnosis suggests that you might be sufferring from Hypertension as you have a ", hyper,"% match to the criterias required to have Hypertension", "Please note this is a Diagnosis and not an Actual Pracitioners report, hence, If you feel the need, please consult a General Practitioner or Seek Emergency help As soon as possible.", "Here are a few recommendations on How to deal with Hypertension" , self._hypertension_model.recommendations(user)
+            return self._report('Hypertension', hyper * 100)
         elif diab < hyper:
-            return "Based on your Symptoms, Our Diagnosis suggests that you might be sufferring from Diabetes Type 2 as you have a ", hyper,"% match to the criterias required to have Type 2 Diabetes", "Please note this is a Diagnosis and not an Actual Pracitioners report, hence, If you feel the need, please consult a General Practitioner or Seek Emergency help As soon as possible.", "Here are a few recommendations on How to deal with Hypertension", self._diabetes_model.recommendations(user)
+            return self._report('Diabetes type 2', hyper * 100)
         elif diab > 0.80 and hyper > 0.80:
-            return "Based on your Symptoms, Our Diganosis suggests that you might be sufferrring from Both hypertension & Diabetes Type 2 as you had a ", hyper,"% & ",diab, "% match to the criterias required to have Hypertension & Diabetes type 2 Respectively" 
+            return self._report('Diabetes type 2 and Hypertension', hyper * 100)
         else:
             return (
                 'Hmmm.... From the Symptoms you provided, it Seems though you might not be'
