@@ -4,7 +4,7 @@ from diabetes_model import DiabetesModel
 from hypertension_model import HypertensionModel
 
 
-THRESHOLD = 0.6
+THRESHOLD = 0.8
 
 
 class SymptomChecker:
@@ -31,18 +31,26 @@ class SymptomChecker:
                 'if its Urgent.']
 
         hyper = self._hypertension_model.analysis(user)
-        diab = self._diabetes_model.symptoms_type2(user)  # temporarily use type 2
+        diab_type_1 = self._diabetes_model.symptoms_type1(user)
+        diab_type_2 = self._diabetes_model.symptoms_type2(user)
+
+        if diab_type_1 > diab_type_2:
+            diab = diab_type_1
+            diab_disease = 'Diabetes type 1'
+        else:
+            diab = diab_type_2
+            diab_disease = 'Diabetes type 2'
 
         if diab > THRESHOLD and hyper > THRESHOLD:
             diab_recs = self._diabetes_model.recommendations(user)
             hyper_recs = self._hypertension_model.recommendations(user)
-            return [self._report('Diabetes type 2 and Hypertension', (diab + hyper) / 2), diab_recs, hyper_recs]
+            return [self._report(f'{diab_disease} and Hypertension', (diab + hyper) / 2), diab_recs, hyper_recs]
         elif hyper > diab:
             recs = self._hypertension_model.recommendations(user)
             return [self._report('Hypertension', hyper), recs]
         elif diab < hyper:
             recs = self._diabetes_model.recommendations(user)
-            return [self._report('Diabetes type 2', diab), recs]
+            return [self._report(f'{diab_disease}', diab), recs]
         else:
             return [
                 'Hmmm.... From the Symptoms you provided, it Seems though you might not be '
