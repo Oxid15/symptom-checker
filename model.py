@@ -28,11 +28,11 @@ class SymptomChecker:
         # diab = self._diabetes_model.symptoms(user)
 
         if hyper > diab:
-            return self._report('Hypertension', hyper * 100)
+            return self._report('Hypertension', hyper)
         elif diab < hyper:
-            return self._report('Diabetes type 2', hyper * 100)
+            return self._report('Diabetes type 2', diab)
         elif diab > 0.80 and hyper > 0.80:
-            return self._report('Diabetes type 2 and Hypertension', hyper * 100)
+            return self._report('Diabetes type 2 and Hypertension', (diab + hyper) / 2)
         else:
             return (
                 'Hmmm.... From the Symptoms you provided, it Seems though you might not be'
