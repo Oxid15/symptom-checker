@@ -27,20 +27,20 @@ class SymptomChecker:
                 'if its Urgent.')
 
         hyper = self._hypertension_model.analysis(user)
-
-        diab = 0
-        # diab = self._diabetes_model.symptoms(user)
+        diab = self._diabetes_model.symptoms_type2(user)  # temporarily use type 2
 
         if hyper > diab:
-            return self._report('Hypertension', hyper)
+            recs = self._hypertension_model.recommendations(user)
+            return self._report('Hypertension', hyper) + recs
         elif diab < hyper:
+            diab = self._diabetes_model.recommendations(user)
             return self._report('Diabetes type 2', diab)
         elif diab > 0.80 and hyper > 0.80:
             return self._report('Diabetes type 2 and Hypertension', (diab + hyper) / 2)
         else:
             return (
-                'Hmmm.... From the Symptoms you provided, it Seems though you might not be'
+                'Hmmm.... From the Symptoms you provided, it Seems though you might not be '
                 'sufferring from either Hypertension or Diabetes. In case, your Symptoms '
-                'start to get aggrevated over time, It is best to seek Medical Attenton'
+                'start to get aggrevated over time, It is best to seek Medical Attenton '
                 'as soon as possible.'
             )

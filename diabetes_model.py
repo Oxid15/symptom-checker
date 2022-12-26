@@ -209,7 +209,7 @@ class DiabetesModel:
 
         # 2
         # Gender, regardless of Men or Women, both are prone to HP & Diabetes
-        if user.is_pregnant:
+        if user.gender == 'Female' and user.is_pregnant:
             FINAL.append(1)
         else:
             FINAL.append(0)
