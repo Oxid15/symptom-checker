@@ -184,7 +184,7 @@ class DiabetesModel:
             FINAL.append(0)
 
         #Calculating the Spatial Difference between the User Vector & Symptom Vector
-        SS = distance.hamming(HYPER_VECTOR,FINAL)
+        SS = distance.hamming(DIA_VECTOR,FINAL)
         ANS = 1.0-SS
 
         return ANS
@@ -369,7 +369,7 @@ class DiabetesModel:
             FINAL.append(0)
 
         #Calculating the Spatial Difference between the User Vector & Symptom Vector
-        SS = distance.hamming(HYPER_VECTOR,FINAL)
+        SS = distance.hamming(DIA_VECTOR,FINAL)
         ANS = 1.0-SS
 
         return ANS
