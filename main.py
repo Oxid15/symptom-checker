@@ -92,7 +92,7 @@ async def ask_optional(update: Update, text: str, kb: List[List[str]]):
     )
 
 
-def end_conversation(user_id) -> str:
+def end_conversation(user_id) -> List[str]:
     user = users[user_id]
     response = model.check(user)
 
@@ -441,7 +441,8 @@ async def has_dizziness(update: Update, context: ContextTypes.DEFAULT_TYPE) -> i
         return DIZZINESS_DURATION
     else:
         response = end_conversation(user.id)
-        await update.message.reply_text(response)
+        for msg in response:
+            await update.message.reply_text(msg)
         return ConversationHandler.END
 
 
@@ -469,7 +470,8 @@ async def dizziness_interferes(update: Update, context: ContextTypes.DEFAULT_TYP
     logger.info(f'User {user.id} selected {users[user.id].dizziness_interferes}')
 
     response = end_conversation(user.id)
-    await update.message.reply_text(response)
+    for msg in response:
+        await update.message.reply_text(msg)
     return ConversationHandler.END
 
 
