@@ -22,8 +22,10 @@ class DiabetesModel:
 
         # 2
         # Gender, regardless of Men or Women, both are prone to HP & Diabetes
-        if user.is_pregnant:
+        if user.gender == 'Female' and user.is_pregnant:
             FINAL.append(1)
+        else:
+            FINAL.append(0)
 
         # 3 & 4
         # Weight & Height
@@ -71,14 +73,14 @@ class DiabetesModel:
 
         act = user.activity_level
 
-        if act == 'Occasional (<30 mins a week)':
+        if act == 'Occasional (<30 mins a Week)':
             FINAL.append(2)
-
-        if act == 'Light Exercise (30 - 90 mins a Week)':
+        elif act == 'Light Exercise (30 - 90 mins a Week)':
             FINAL.append(1)
-
-        if act == 'Active (> 120 mins a Week)':
+        elif act == 'Active (> 120 mins a Week)':
             FINAL.append(0)
+        else:
+            RuntimeError(f'got {act}')
 
         # 7 & 8
         # Smoking & Alcohol
@@ -183,12 +185,12 @@ class DiabetesModel:
         else:
             FINAL.append(0)
 
-        #Calculating the Spatial Difference between the User Vector & Symptom Vector
-        SS = distance.hamming(DIA_VECTOR,FINAL)
-        ANS = 1.0-SS
+        # Calculating the Spatial Difference between the User Vector & Symptom Vector
+        SS = distance.hamming(DIA_VECTOR, FINAL)
+        ANS = 1.0 - SS
 
         return ANS
-    
+
     def symptoms_type2(self, user: UserModel):
         #  Array to hold state
         FINAL = []
@@ -209,6 +211,8 @@ class DiabetesModel:
         # Gender, regardless of Men or Women, both are prone to HP & Diabetes
         if user.is_pregnant:
             FINAL.append(1)
+        else:
+            FINAL.append(0)
 
         # 3 & 4
         # Weight & Height
@@ -256,14 +260,14 @@ class DiabetesModel:
 
         act = user.activity_level
 
-        if act == 'Occasional (<30 mins a week)':
+        if act == 'Occasional (<30 mins a Week)':
             FINAL.append(2)
-
-        if act == 'Light Exercise (30 - 90 mins a Week)':
+        elif act == 'Light Exercise (30 - 90 mins a Week)':
             FINAL.append(1)
-
-        if act == 'Active (> 120 mins a Week)':
+        elif act == 'Active (> 120 mins a Week)':
             FINAL.append(0)
+        else:
+            raise RuntimeError(f'got {act}')
 
         # 7 & 8
         # Smoking & Alcohol
@@ -368,8 +372,8 @@ class DiabetesModel:
         else:
             FINAL.append(0)
 
-        #Calculating the Spatial Difference between the User Vector & Symptom Vector
-        SS = distance.hamming(DIA_VECTOR,FINAL)
+        # Calculating the Spatial Difference between the User Vector & Symptom Vector
+        SS = distance.hamming(DIA_VECTOR, FINAL)
         ANS = 1.0-SS
 
         return ANS
