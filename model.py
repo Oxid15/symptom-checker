@@ -4,7 +4,7 @@ from diabetes_model import DiabetesModel
 from hypertension_model import HypertensionModel
 
 
-THRESHOLD = 0.65
+THRESHOLD = 0.60
 
 
 class SymptomChecker:
@@ -40,7 +40,11 @@ class SymptomChecker:
         else:
             diab = diab_type_2
             diab_disease = 'Diabetes type 2'
-
+        
+        print("Hyper = ", hyper)
+        print("diab 1 = ", diab_type_1)
+        print("diab 2 = ", diab_type_2)
+        
         if diab > THRESHOLD and hyper > THRESHOLD:
             diab_recs = self._diabetes_model.recommendations(user)
             hyper_recs = self._hypertension_model.recommendations(user)
@@ -48,7 +52,7 @@ class SymptomChecker:
         elif hyper > diab:
             recs = self._hypertension_model.recommendations(user)
             return [self._report('Hypertension', hyper), recs]
-        elif diab < hyper:
+        elif diab > hyper:
             recs = self._diabetes_model.recommendations(user)
             return [self._report(f'{diab_disease}', diab), recs]
         else:
