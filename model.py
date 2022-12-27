@@ -6,6 +6,8 @@ from hypertension_model import HypertensionModel
 
 THRESHOLD = 0.60
 
+upper_bound = 0.50
+lower_bound = 0.59
 
 class SymptomChecker:
     def __init__(self):
@@ -61,6 +63,18 @@ class SymptomChecker:
             diseases.append(diab_disease)
             scores.append(diab)
             recs.append(r)
+        if hyper > lower_bound and hyper < upper_bound:
+            return ["According to your Symptoms, you seem to be showing signs of Hypertension. However,"
+                    "The current state of your Symptoms do not fully Align with those who are sufferring from Hypertension. "
+                    "We recommend you perform Tests to verify further Vitals of the Body such as your Blood Pressure & Pulse."
+                    "Getting a Doctors Opinion would be advisable. You can also Use this Symptom checker again after a Few Days, to"
+                    " reflect on the state of your Symptoms. In case, your Symptoms gets Aggrevated, we Advise you to seek Immediate Medical Attention."
+        if diab > lower_bound and diab < upper_bound:
+            return ["According to your Symptoms, you seem to be showing signs of Diabetes. However,"
+                    "The current state of your Symptoms do not fully Align with those who are sufferring from Diabetes. "
+                    "We recommend you perform Tests to verify further Vitals of the Body such as your Blood Sugar Level & Blood Pressure."
+                    "Getting a Doctors Opinion would be advisable. You can also Use this Symptom checker again after a Few Days, to"
+                    " reflect on the state of your Symptoms. In case, your Symptoms gets Aggrevated, we Advise you to seek Immediate Medical Attention."
         if len(diseases) == 0:
             return [
                 'Hmmm.... From the Symptoms you provided, it Seems though you might not be '
