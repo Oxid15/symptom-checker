@@ -49,10 +49,10 @@ class SymptomChecker:
             diab_recs = self._diabetes_model.recommendations(user)
             hyper_recs = self._hypertension_model.recommendations(user)
             return [self._report(f'{diab_disease} and Hypertension', (diab + hyper) / 2), diab_recs, hyper_recs]
-        elif hyper > diab:
+        elif hyper > diab and hyper > THRESHOLD:
             recs = self._hypertension_model.recommendations(user)
             return [self._report('Hypertension', hyper), recs]
-        elif diab > hyper:
+        elif diab > hyper and diab > THRESHOLD:
             recs = self._diabetes_model.recommendations(user)
             return [self._report(f'{diab_disease}', diab), recs]
         else:
