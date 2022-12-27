@@ -451,7 +451,7 @@ async def dizziness_duration(update: Update, context: ContextTypes.DEFAULT_TYPE)
     users[user.id].dizziness_duration = update.message.text == 'Yes'
     logger.info(f'User {user.id} selected {users[user.id].dizziness_duration}')
 
-    await ask_optional(update, 'Can you Describe the Intensity of the Pain:', INTENSITY_KB)
+    await ask_optional(update, 'Can you Describe the Intensity of the Dizziness:', INTENSITY_KB)
     return DIZZINESS_INTENSITY
 
 

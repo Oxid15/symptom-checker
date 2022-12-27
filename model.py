@@ -4,7 +4,7 @@ from diabetes_model import DiabetesModel
 from hypertension_model import HypertensionModel
 
 
-THRESHOLD = 0.65
+THRESHOLD = 0.60
 
 
 class SymptomChecker:
@@ -12,16 +12,18 @@ class SymptomChecker:
         self._hypertension_model = HypertensionModel()
         self._diabetes_model = DiabetesModel()
 
-    def _report(self, disease: str, score: float) -> str:
+    def _report(self, diseases: List[str], scores: List[float]) -> str:
+        name = ', '.join(diseases[:-1]) + ' and ' + diseases[-1]
+        score = sum(scores) / len(scores)
         return (
                 f'Based on your Symptoms, Our Diagnosis suggests that you might be sufferring '
-                f'from {disease} as you have a {score * 100: 0.2f}% match to the '
+                f'from {name} as you have a {score * 100: 0.2f}% match to the '
                 f'criterias required '
-                f'to have {disease}'
+                f'to have {name}'
                 f'\nPlease note this is a Diagnosis and not an Actual Pracitioners report, hence '
                 f'If you feel the need, please consult a General Practitioner or Seek Emergency '
                 f'help As soon as possible.\nHere are a few recommendations on How to deal '
-                f'with {disease}\n\n')
+                f'with {name}\n\n')
 
     def check(self, user: UserModel) -> List[str]:
         if user.age < 18:
@@ -41,20 +43,30 @@ class SymptomChecker:
             diab = diab_type_2
             diab_disease = 'Diabetes type 2'
 
-        if diab > THRESHOLD and hyper > THRESHOLD:
-            diab_recs = self._diabetes_model.recommendations(user)
-            hyper_recs = self._hypertension_model.recommendations(user)
-            return [self._report(f'{diab_disease} and Hypertension', (diab + hyper) / 2), diab_recs, hyper_recs]
-        elif hyper > diab:
-            recs = self._hypertension_model.recommendations(user)
-            return [self._report('Hypertension', hyper), recs]
-        elif diab < hyper:
-            recs = self._diabetes_model.recommendations(user)
-            return [self._report(f'{diab_disease}', diab), recs]
-        else:
+        print("Hyper = ", hyper)
+        print("diab 1 = ", diab_type_1)
+        print("diab 2 = ", diab_type_2)
+
+        diseases = []
+        scores = []
+        recs = []
+
+        if hyper > THRESHOLD:
+            r = self._hypertension_model.recommendations(user)
+            diseases.append('Hypertension')
+            scores.append(hyper)
+            recs.append(r)
+        if diab > THRESHOLD:
+            r = self._diabetes_model.recommendations(user)
+            diseases.append(diab_disease)
+            scores.append(diab)
+            recs.append(r)
+        if len(diseases) == 0:
             return [
                 'Hmmm.... From the Symptoms you provided, it Seems though you might not be '
                 'sufferring from either Hypertension or Diabetes. In case, your Symptoms '
                 'start to get aggrevated over time, It is best to seek Medical Attenton '
                 'as soon as possible.'
             ]
+        else:
+            return [self._report(diseases, scores)] + recs
